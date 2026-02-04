@@ -4,10 +4,13 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 from unittest                                                                                       import TestCase
+
+from issues_fs.issues.graph_services.Graph__Repository__Factory    import Graph__Repository__Factory
+from issues_fs.issues.graph_services.Node__Service                 import Node__Service
+from issues_fs.issues.graph_services.Type__Service                 import Type__Service
 from issues_fs.schemas.graph.Safe_Str__Graph_Types                 import Safe_Str__Node_Type, Safe_Str__Node_Label
 from issues_fs.schemas.graph.Schema__Node__Create__Request         import Schema__Node__Create__Request
 from issues_fs.schemas.graph.Schema__Node__Update__Request         import Schema__Node__Update__Request
-#from tests.unit.Html_Transformation_Workbench__Test_Objs                                            import setup__html_transformation_workbench__test_objs
 
 
 class test_Node__Service__deep_merge(TestCase):
@@ -15,9 +18,13 @@ class test_Node__Service__deep_merge(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        cls.repository    = Graph__Repository__Factory.create_memory()
+        cls.type_service  = Type__Service(repository=cls.repository)
+        cls.node_service  = Node__Service(repository=cls.repository)
 
-        cls.test_objs    = setup__html_transformation_workbench__test_objs()
-        cls.node_service = cls.test_objs.fast_api.node_service
+    def setUp(self):
+        self.repository.clear_storage()
+        self.type_service.initialize_default_types()
 
     def test_deep_merge_properties__preserves_existing_keys(self):
         # Create node with existing properties

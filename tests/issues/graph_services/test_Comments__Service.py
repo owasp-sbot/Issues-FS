@@ -4,6 +4,10 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 from unittest                                                                                       import TestCase
+from issues_fs.issues.graph_services.Comments__Service             import Comments__Service
+from issues_fs.issues.graph_services.Graph__Repository__Factory    import Graph__Repository__Factory
+from issues_fs.issues.graph_services.Node__Service                 import Node__Service
+from issues_fs.issues.graph_services.Type__Service                 import Type__Service
 from issues_fs.schemas.graph.Safe_Str__Graph_Types                 import Safe_Str__Node_Type, Safe_Str__Node_Label
 from issues_fs.schemas.graph.Schema__Node__Create__Request         import Schema__Node__Create__Request
 from issues_fs.schemas.issues.Schema__Comment                      import Schema__Comment__Create__Request, Schema__Comment__Update__Request
@@ -14,9 +18,12 @@ class test_Comments__Service(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.test_objs        = setup__html_transformation_workbench__test_objs()
-        cls.node_service     = cls.test_objs.fast_api.node_service
-        cls.comments_service = cls.test_objs.fast_api.comments_service
+        cls.repository       = Graph__Repository__Factory.create_memory()
+        cls.type_service     = Type__Service    (repository=cls.repository)
+        cls.node_service     = Node__Service    (repository=cls.repository)
+        cls.comments_service = Comments__Service(repository=cls.repository)
+
+        cls.type_service.initialize_default_types()
 
         # Create a test node
         create_request = Schema__Node__Create__Request(title     = 'Test Node for Comments',
