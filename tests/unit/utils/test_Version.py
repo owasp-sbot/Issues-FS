@@ -1,7 +1,8 @@
 import issues_fs
 from unittest                      import TestCase
 from osbot_utils.utils.Files       import parent_folder, file_name
-from issues_fs.utils.Version       import Version, version__issues_fs
+from issues_fs.utils.Version       import version__issues_fs, Version
+
 
 
 class test_Version(TestCase):
