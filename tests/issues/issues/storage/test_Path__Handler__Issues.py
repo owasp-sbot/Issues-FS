@@ -6,8 +6,8 @@ from unittest                                                                   
 from osbot_utils.type_safe.Type_Safe                                                         import Type_Safe
 from osbot_utils.type_safe.primitives.core.Safe_Str                                          import Safe_Str
 from osbot_utils.utils.Objects                                                               import base_types
-from mgraph_ai_ui_html_transformation_workbench.schemas.safe_str.Safe_Str__Issue_Id          import Safe_Str__Issue_Id
-from mgraph_ai_ui_html_transformation_workbench.service.issues.storage.Path__Handler__Issues import Path__Handler__Issues
+from issues_fs.schemas.safe_str.Safe_Str__Issue_Id          import Safe_Str__Issue_Id
+from issues_fs.issues.storage.Path__Handler__Issues import Path__Handler__Issues
 
 
 class test_Path__Handler__Issues(TestCase):

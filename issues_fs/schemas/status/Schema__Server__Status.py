@@ -6,11 +6,11 @@
 from osbot_utils.type_safe.Type_Safe                                                        import Type_Safe
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text                import Safe_Str__Text
 from osbot_utils.type_safe.primitives.domains.identifiers.safe_int.Timestamp_Now            import Timestamp_Now
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__API__Info            import Schema__API__Info
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Git__Status          import Schema__Git__Status
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Index__Status        import Schema__Index__Status
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Storage__Status      import Schema__Storage__Status
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Types__Status        import Schema__Types__Status
+from issues_fs.schemas.status.Schema__API__Info            import Schema__API__Info
+from issues_fs.schemas.status.Schema__Git__Status          import Schema__Git__Status
+from issues_fs.schemas.status.Schema__Index__Status        import Schema__Index__Status
+from issues_fs.schemas.status.Schema__Storage__Status      import Schema__Storage__Status
+from issues_fs.schemas.status.Schema__Types__Status        import Schema__Types__Status
 
 
 class Schema__Server__Status(Type_Safe):                                         # Full server status

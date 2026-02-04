@@ -4,8 +4,8 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 from unittest                                                                                           import TestCase
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Node_Label
-from mgraph_ai_ui_html_transformation_workbench.service.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node, FILE_NAME__ISSUE_JSON, FILE_NAME__NODE_JSON
+from issues_fs.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Node_Label
+from issues_fs.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node, FILE_NAME__ISSUE_JSON, FILE_NAME__NODE_JSON
 
 
 class test_Path__Handler__Graph_Node__Phase_1(TestCase):

@@ -7,9 +7,9 @@ from typing                                                                     
 from osbot_utils.type_safe.Type_Safe                                                         import Type_Safe
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text                 import Safe_Str__Text
 from osbot_utils.type_safe.primitives.domains.identifiers.Obj_Id                             import Obj_Id
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types          import Safe_Str__Node_Type, Safe_Str__Node_Type_Display, Safe_Str__Status
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Property__Definition   import Schema__Property__Definition
-from mgraph_ai_ui_html_transformation_workbench.schemas.safe_str.Safe_Str__Hex_Color         import Safe_Str__Hex_Color
+from issues_fs.schemas.graph.Safe_Str__Graph_Types          import Safe_Str__Node_Type, Safe_Str__Node_Type_Display, Safe_Str__Status
+from issues_fs.schemas.graph.Schema__Property__Definition   import Schema__Property__Definition
+from issues_fs.schemas.safe_str.Safe_Str__Hex_Color         import Safe_Str__Hex_Color
 
 # todo: refactor to Schema__Issue__Node__Type
 #       (do the same *__Issue__* refactoring where applicable

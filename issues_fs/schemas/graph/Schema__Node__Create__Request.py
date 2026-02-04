@@ -6,8 +6,8 @@
 from typing                                                                                         import List, Dict, Any
 from osbot_utils.type_safe.Type_Safe                                                                import Type_Safe
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text                        import Safe_Str__Text
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types                 import Safe_Str__Node_Type, Safe_Str__Status
-from mgraph_ai_ui_html_transformation_workbench.schemas.safe_str.Safe_Str__Issue__Node__Description import Safe_Str__Issue__Node__Description
+from issues_fs.schemas.graph.Safe_Str__Graph_Types                 import Safe_Str__Node_Type, Safe_Str__Status
+from issues_fs.schemas.safe_str.Safe_Str__Issue__Node__Description import Safe_Str__Issue__Node__Description
 
 
 class Schema__Node__Create__Request(Type_Safe):                                  # Create node request

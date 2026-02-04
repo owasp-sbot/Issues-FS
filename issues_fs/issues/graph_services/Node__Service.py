@@ -8,22 +8,22 @@ from osbot_utils.type_safe.Type_Safe                                            
 from osbot_utils.type_safe.primitives.core.Safe_UInt                                                    import Safe_UInt
 from osbot_utils.type_safe.primitives.domains.identifiers.Obj_Id                                        import Obj_Id
 from osbot_utils.type_safe.primitives.domains.identifiers.safe_int.Timestamp_Now                        import Timestamp_Now
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Node_Label
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Global__Index                     import Schema__Global__Index
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Graph__Link import Schema__Graph__Link
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Graph__Node import Schema__Graph__Node
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Graph__Response import Schema__Graph__Response
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node                              import Schema__Node
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Create__Request             import Schema__Node__Create__Request
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Create__Response            import Schema__Node__Create__Response
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Delete__Response            import Schema__Node__Delete__Response
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Link import Schema__Node__Link
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__List__Response              import Schema__Node__List__Response
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Summary                     import Schema__Node__Summary
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Update__Request             import Schema__Node__Update__Request
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Update__Response            import Schema__Node__Update__Response
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Type__Summary                     import Schema__Type__Summary
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository         import Graph__Repository
+from issues_fs.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Node_Label
+from issues_fs.schemas.graph.Schema__Global__Index                     import Schema__Global__Index
+from issues_fs.schemas.graph.Schema__Graph__Link import Schema__Graph__Link
+from issues_fs.schemas.graph.Schema__Graph__Node import Schema__Graph__Node
+from issues_fs.schemas.graph.Schema__Graph__Response import Schema__Graph__Response
+from issues_fs.schemas.graph.Schema__Node                              import Schema__Node
+from issues_fs.schemas.graph.Schema__Node__Create__Request             import Schema__Node__Create__Request
+from issues_fs.schemas.graph.Schema__Node__Create__Response            import Schema__Node__Create__Response
+from issues_fs.schemas.graph.Schema__Node__Delete__Response            import Schema__Node__Delete__Response
+from issues_fs.schemas.graph.Schema__Node__Link import Schema__Node__Link
+from issues_fs.schemas.graph.Schema__Node__List__Response              import Schema__Node__List__Response
+from issues_fs.schemas.graph.Schema__Node__Summary                     import Schema__Node__Summary
+from issues_fs.schemas.graph.Schema__Node__Update__Request             import Schema__Node__Update__Request
+from issues_fs.schemas.graph.Schema__Node__Update__Response            import Schema__Node__Update__Response
+from issues_fs.schemas.graph.Schema__Type__Summary                     import Schema__Type__Summary
+from issues_fs.issues.graph_services.Graph__Repository         import Graph__Repository
 
 # todo: refactor to Issue__Node__Service
 class Node__Service(Type_Safe):                                                  # Node business logic service

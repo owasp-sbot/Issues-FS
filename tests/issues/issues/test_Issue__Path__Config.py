@@ -7,7 +7,7 @@ from osbot_utils.type_safe.Type_Safe                                            
 from osbot_utils.type_safe.primitives.core.Safe_Str                                                     import Safe_Str
 from osbot_utils.utils.Files                                                                            import folder_create, folder_delete_all, folder_exists
 from osbot_utils.utils.Objects                                                                          import base_types
-from mgraph_ai_ui_html_transformation_workbench.service.issues.Issue__Path__Config                      import Issue__Path__Config
+from issues_fs.issues.Issue__Path__Config                      import Issue__Path__Config
 
 
 class test_Issue__Path__Config(TestCase):

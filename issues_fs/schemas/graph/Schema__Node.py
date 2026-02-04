@@ -10,9 +10,9 @@ from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text    
 from osbot_utils.type_safe.primitives.domains.identifiers.Node_Id                                   import Node_Id
 from osbot_utils.type_safe.primitives.domains.identifiers.Obj_Id                                    import Obj_Id
 from osbot_utils.type_safe.primitives.domains.identifiers.safe_int.Timestamp_Now                    import Timestamp_Now
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types                 import Safe_Str__Node_Type, Safe_Str__Node_Label, Safe_Str__Status
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Link                    import Schema__Node__Link
-from mgraph_ai_ui_html_transformation_workbench.schemas.safe_str.Safe_Str__Issue__Node__Description import Safe_Str__Issue__Node__Description
+from issues_fs.schemas.graph.Safe_Str__Graph_Types                 import Safe_Str__Node_Type, Safe_Str__Node_Label, Safe_Str__Status
+from issues_fs.schemas.graph.Schema__Node__Link                    import Schema__Node__Link
+from issues_fs.schemas.safe_str.Safe_Str__Issue__Node__Description import Safe_Str__Issue__Node__Description
 
 
 # todo: refactor all these classes to use 'Issue' since that is the generic name for this

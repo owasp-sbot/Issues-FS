@@ -6,7 +6,7 @@
 from osbot_utils.type_safe.Type_Safe                                                                        import Type_Safe
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text                                import Safe_Str__Text
 from memory_fs.storage_fs.Storage_FS                                                                        import Storage_FS
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Storage__Status                      import Schema__Storage__Status
+from issues_fs.schemas.status.Schema__Storage__Status                      import Schema__Storage__Status
 
 
 class Storage__Status__Service(Type_Safe):                                       # Storage status service

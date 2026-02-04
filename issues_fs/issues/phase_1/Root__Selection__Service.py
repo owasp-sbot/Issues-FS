@@ -9,9 +9,9 @@ from osbot_utils.type_safe.primitives.core.Safe_UInt                            
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path                       import Safe_Str__File__Path
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                                          import type_safe
 from osbot_utils.utils.Json                                                                             import json_loads
-from mgraph_ai_ui_html_transformation_workbench.schemas.issues.phase_1.Schema__Root                     import Schema__Root__Candidate, Schema__Root__List__Response, Schema__Root__Current__Response, Schema__Root__Select__Response, Schema__Root__Select__Request
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository         import Graph__Repository
-from mgraph_ai_ui_html_transformation_workbench.service.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node, FILE_NAME__ISSUE_JSON, FILE_NAME__NODE_JSON
+from issues_fs.schemas.issues.phase_1.Schema__Root                     import Schema__Root__Candidate, Schema__Root__List__Response, Schema__Root__Current__Response, Schema__Root__Select__Response, Schema__Root__Select__Request
+from issues_fs.issues.graph_services.Graph__Repository         import Graph__Repository
+from issues_fs.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node, FILE_NAME__ISSUE_JSON, FILE_NAME__NODE_JSON
 
 
 class Root__Selection__Service(Type_Safe):                                       # Service for root folder selection

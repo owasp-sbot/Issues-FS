@@ -11,10 +11,10 @@ from osbot_utils.type_safe.primitives.domains.identifiers.Obj_Id                
 from osbot_utils.type_safe.primitives.domains.identifiers.safe_int.Timestamp_Now                        import Timestamp_Now
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                                          import type_safe
 from osbot_utils.utils.Json                                                                             import json_dumps, json_loads
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Node_Label, Safe_Str__Status
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node                              import Schema__Node
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository         import Graph__Repository
-from mgraph_ai_ui_html_transformation_workbench.service.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node
+from issues_fs.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Node_Label, Safe_Str__Status
+from issues_fs.schemas.graph.Schema__Node                              import Schema__Node
+from issues_fs.issues.graph_services.Graph__Repository         import Graph__Repository
+from issues_fs.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

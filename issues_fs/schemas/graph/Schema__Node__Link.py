@@ -6,7 +6,7 @@
 from osbot_utils.type_safe.Type_Safe                                                import Type_Safe
 from osbot_utils.type_safe.primitives.domains.identifiers.Obj_Id                    import Obj_Id
 from osbot_utils.type_safe.primitives.domains.identifiers.safe_int.Timestamp_Now    import Timestamp_Now
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types import Safe_Str__Link_Verb, Safe_Str__Node_Label
+from issues_fs.schemas.graph.Safe_Str__Graph_Types import Safe_Str__Link_Verb, Safe_Str__Node_Label
 
 
 class Schema__Node__Link(Type_Safe):                                             # Relationship to another node

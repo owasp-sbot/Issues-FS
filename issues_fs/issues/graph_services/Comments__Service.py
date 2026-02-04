@@ -6,9 +6,9 @@ from typing                                                                     
 from osbot_utils.type_safe.Type_Safe                                                                import Type_Safe
 from osbot_utils.type_safe.primitives.domains.identifiers.Obj_Id                                    import Obj_Id
 from osbot_utils.type_safe.primitives.domains.identifiers.safe_int.Timestamp_Now                    import Timestamp_Now
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types                 import Safe_Str__Node_Type, Safe_Str__Node_Label
-from mgraph_ai_ui_html_transformation_workbench.schemas.issues.Schema__Comment                      import Schema__Comment__List__Response, Schema__Comment__Create__Request, Schema__Comment__Response, Schema__Comment, Schema__Comment__Update__Request, Schema__Comment__Delete__Response
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository     import Graph__Repository
+from issues_fs.schemas.graph.Safe_Str__Graph_Types                 import Safe_Str__Node_Type, Safe_Str__Node_Label
+from issues_fs.schemas.issues.Schema__Comment                      import Schema__Comment__List__Response, Schema__Comment__Create__Request, Schema__Comment__Response, Schema__Comment, Schema__Comment__Update__Request, Schema__Comment__Delete__Response
+from issues_fs.issues.graph_services.Graph__Repository     import Graph__Repository
 
 
 class Comments__Service(Type_Safe):                                              # Comment business logic service

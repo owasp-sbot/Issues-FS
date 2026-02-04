@@ -8,14 +8,14 @@ from osbot_utils.type_safe.Type_Safe                                            
 from osbot_utils.type_safe.primitives.domains.identifiers.safe_int.Timestamp_Now                        import Timestamp_Now
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe import type_safe
 
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Node_Label, Safe_Str__Link_Verb
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Link__Create__Request             import Schema__Link__Create__Request
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Link__Create__Response            import Schema__Link__Create__Response
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Link__Delete__Response            import Schema__Link__Delete__Response
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Link__List__Response              import Schema__Link__List__Response
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Link                        import Schema__Node__Link
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Link__Type                        import Schema__Link__Type
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository         import Graph__Repository
+from issues_fs.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Node_Label, Safe_Str__Link_Verb
+from issues_fs.schemas.graph.Schema__Link__Create__Request             import Schema__Link__Create__Request
+from issues_fs.schemas.graph.Schema__Link__Create__Response            import Schema__Link__Create__Response
+from issues_fs.schemas.graph.Schema__Link__Delete__Response            import Schema__Link__Delete__Response
+from issues_fs.schemas.graph.Schema__Link__List__Response              import Schema__Link__List__Response
+from issues_fs.schemas.graph.Schema__Node__Link                        import Schema__Node__Link
+from issues_fs.schemas.graph.Schema__Link__Type                        import Schema__Link__Type
+from issues_fs.issues.graph_services.Graph__Repository         import Graph__Repository
 
 
 class Link__Service(Type_Safe):                                                  # Link business logic service

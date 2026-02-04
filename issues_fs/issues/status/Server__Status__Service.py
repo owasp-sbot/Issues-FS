@@ -7,14 +7,14 @@ import sys
 from datetime                                                                                               import datetime
 from osbot_utils.type_safe.Type_Safe                                                                        import Type_Safe
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text                                import Safe_Str__Text
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__API__Info                            import Schema__API__Info
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Server__Status                       import Schema__Server__Status
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Server__Status                       import Schema__Server__Status__Response
-from mgraph_ai_ui_html_transformation_workbench.service.issues.status.Git__Status__Service                  import Git__Status__Service
-from mgraph_ai_ui_html_transformation_workbench.service.issues.status.Index__Status__Service                import Index__Status__Service
-from mgraph_ai_ui_html_transformation_workbench.service.issues.status.Storage__Status__Service              import Storage__Status__Service
-from mgraph_ai_ui_html_transformation_workbench.service.issues.status.Types__Status__Service                import Types__Status__Service
-from mgraph_ai_ui_html_transformation_workbench.utils.Version                                               import version__mgraph_ai_service__html_transformation_workbench
+from issues_fs.schemas.status.Schema__API__Info                            import Schema__API__Info
+from issues_fs.schemas.status.Schema__Server__Status                       import Schema__Server__Status
+from issues_fs.schemas.status.Schema__Server__Status                       import Schema__Server__Status__Response
+from issues_fs.issues.status.Git__Status__Service                  import Git__Status__Service
+from issues_fs.issues.status.Index__Status__Service                import Index__Status__Service
+from issues_fs.issues.status.Storage__Status__Service              import Storage__Status__Service
+from issues_fs.issues.status.Types__Status__Service                import Types__Status__Service
+from issues_fs.utils.Version                                               import version__issues_fs
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # Configuration Constants
@@ -86,7 +86,7 @@ class Server__Status__Service(Type_Safe):                                       
         return datetime.utcnow().isoformat() + 'Z'
 
     def _get_api_info(self) -> Schema__API__Info:                                # Build API info
-        return Schema__API__Info(version        = version__mgraph_ai_service__html_transformation_workbench                ,
+        return Schema__API__Info(version        = version__issues_fs                ,
                                  build_date     = Safe_Str__Text(BUILD_DATE)                 ,
                                  environment    = Safe_Str__Text(ENVIRONMENT)                ,
                                  python_version = Safe_Str__Text(sys.version.split()[0])     ,

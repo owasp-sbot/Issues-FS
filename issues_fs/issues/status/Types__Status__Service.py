@@ -9,8 +9,8 @@ from osbot_utils.type_safe.primitives.core.Safe_UInt                            
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text                                import Safe_Str__Text
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe import type_safe
 
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Types__Status                        import Schema__Types__Status, Schema__Node__Type__Summary, Schema__Link__Type__Summary
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Type__Service                 import Type__Service
+from issues_fs.schemas.status.Schema__Types__Status                        import Schema__Types__Status, Schema__Node__Type__Summary, Schema__Link__Type__Summary
+from issues_fs.issues.graph_services.Type__Service                 import Type__Service
 
 
 class Types__Status__Service(Type_Safe):                                         # Types status service

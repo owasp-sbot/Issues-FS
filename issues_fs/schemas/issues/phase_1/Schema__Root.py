@@ -9,7 +9,7 @@ from osbot_utils.type_safe.primitives.core.Safe_UInt                            
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text                 import Safe_Str__Text
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path import Safe_Str__File__Path
 
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types          import Safe_Str__Node_Type, Safe_Str__Node_Label
+from issues_fs.schemas.graph.Safe_Str__Graph_Types          import Safe_Str__Node_Type, Safe_Str__Node_Label
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

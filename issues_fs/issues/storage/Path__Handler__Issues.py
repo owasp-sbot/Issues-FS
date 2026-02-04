@@ -9,7 +9,7 @@ from osbot_utils.type_safe.Type_Safe                                            
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                      import type_safe
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Name   import Safe_Str__File__Name
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path   import Safe_Str__File__Path
-from mgraph_ai_ui_html_transformation_workbench.schemas.safe_str.Safe_Str__Issue_Id import Safe_Str__Issue_Id
+from issues_fs.schemas.safe_str.Safe_Str__Issue_Id import Safe_Str__Issue_Id
 
 
 class Path__Handler__Issues(Type_Safe):                                          # Path handler for issues

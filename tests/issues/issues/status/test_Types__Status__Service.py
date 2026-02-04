@@ -7,10 +7,10 @@ from unittest                                                                   
 from osbot_utils.testing.__                                                                     import __
 from osbot_utils.type_safe.type_safe_core.collections.Type_Safe__List                           import Type_Safe__List
 from memory_fs.helpers.Memory_FS__In_Memory                                                     import Memory_FS__In_Memory
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Types__Status            import Schema__Types__Status
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository import Graph__Repository
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Type__Service     import Type__Service
-from mgraph_ai_ui_html_transformation_workbench.service.issues.status.Types__Status__Service    import Types__Status__Service
+from issues_fs.schemas.status.Schema__Types__Status            import Schema__Types__Status
+from issues_fs.issues.graph_services.Graph__Repository import Graph__Repository
+from issues_fs.issues.graph_services.Type__Service     import Type__Service
+from issues_fs.issues.status.Types__Status__Service    import Types__Status__Service
 
 class test_Types__Status__Service(TestCase):
 

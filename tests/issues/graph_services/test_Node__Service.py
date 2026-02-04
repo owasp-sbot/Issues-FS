@@ -7,12 +7,12 @@ from unittest                                                                   
 from osbot_utils.type_safe.Type_Safe                                                                     import Type_Safe
 from osbot_utils.utils.Objects import base_classes
 
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types import Safe_Str__Node_Type, Safe_Str__Status, Safe_Str__Node_Label
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Create__Request import Schema__Node__Create__Request
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Update__Request import Schema__Node__Update__Request
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository__Factory import Graph__Repository__Factory
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Node__Service              import Node__Service
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Type__Service              import Type__Service
+from issues_fs.schemas.graph.Safe_Str__Graph_Types import Safe_Str__Node_Type, Safe_Str__Status, Safe_Str__Node_Label
+from issues_fs.schemas.graph.Schema__Node__Create__Request import Schema__Node__Create__Request
+from issues_fs.schemas.graph.Schema__Node__Update__Request import Schema__Node__Update__Request
+from issues_fs.issues.graph_services.Graph__Repository__Factory import Graph__Repository__Factory
+from issues_fs.issues.graph_services.Node__Service              import Node__Service
+from issues_fs.issues.graph_services.Type__Service              import Type__Service
 
 
 class test_Node__Service(TestCase):

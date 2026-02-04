@@ -9,9 +9,9 @@ from memory_fs.storage_fs.providers.Storage_FS__Local_Disk                      
 from memory_fs.storage_fs.providers.Storage_FS__Sqlite                                           import Storage_FS__Sqlite
 from memory_fs.storage_fs.providers.Storage_FS__Zip                                              import Storage_FS__Zip
 from osbot_utils.type_safe.Type_Safe                                                             import Type_Safe
-from mgraph_ai_ui_html_transformation_workbench.schemas.enums.Enum__Graph__Storage__Backend      import Enum__Graph__Storage__Backend
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository  import Graph__Repository
-from mgraph_ai_ui_html_transformation_workbench.service.issues.storage.Path__Handler__Graph_Node import Path__Handler__Graph_Node
+from issues_fs.schemas.enums.Enum__Graph__Storage__Backend      import Enum__Graph__Storage__Backend
+from issues_fs.issues.graph_services.Graph__Repository  import Graph__Repository
+from issues_fs.issues.storage.Path__Handler__Graph_Node import Path__Handler__Graph_Node
 
 
 class Graph__Repository__Factory(Type_Safe):                                     # Factory for graph repositories

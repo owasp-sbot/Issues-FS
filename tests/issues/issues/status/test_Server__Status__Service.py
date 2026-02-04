@@ -6,17 +6,17 @@ import sys
 from unittest                                                                                               import TestCase
 from osbot_utils.testing.__                                                                                 import __, __SKIP__
 from memory_fs.helpers.Memory_FS__In_Memory                                                                 import Memory_FS__In_Memory
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__API__Info                            import Schema__API__Info
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Server__Status                       import Schema__Server__Status
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Server__Status                       import Schema__Server__Status__Response
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository             import Graph__Repository
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Type__Service                 import Type__Service
-from mgraph_ai_ui_html_transformation_workbench.service.issues.status.Git__Status__Service                  import Git__Status__Service
-from mgraph_ai_ui_html_transformation_workbench.service.issues.status.Index__Status__Service                import Index__Status__Service
-from mgraph_ai_ui_html_transformation_workbench.service.issues.status.Server__Status__Service               import Server__Status__Service
-from mgraph_ai_ui_html_transformation_workbench.service.issues.status.Storage__Status__Service              import Storage__Status__Service
-from mgraph_ai_ui_html_transformation_workbench.service.issues.status.Types__Status__Service                import Types__Status__Service
-from mgraph_ai_ui_html_transformation_workbench.utils.Version                                               import version__mgraph_ai_service__html_transformation_workbench
+from issues_fs.schemas.status.Schema__API__Info                            import Schema__API__Info
+from issues_fs.schemas.status.Schema__Server__Status                       import Schema__Server__Status
+from issues_fs.schemas.status.Schema__Server__Status                       import Schema__Server__Status__Response
+from issues_fs.issues.graph_services.Graph__Repository             import Graph__Repository
+from issues_fs.issues.graph_services.Type__Service                 import Type__Service
+from issues_fs.issues.status.Git__Status__Service                  import Git__Status__Service
+from issues_fs.issues.status.Index__Status__Service                import Index__Status__Service
+from issues_fs.issues.status.Server__Status__Service               import Server__Status__Service
+from issues_fs.issues.status.Storage__Status__Service              import Storage__Status__Service
+from issues_fs.issues.status.Types__Status__Service                import Types__Status__Service
+from issues_fs.utils.Version                                               import version__issues_fs
 
 
 # todo: refactor this to use actual services with actual data (i.e. not mocks)
@@ -85,7 +85,7 @@ class test_Server__Status__Service(TestCase):
         python_version  = sys.version.split()[0]
         assert type(response) is Schema__Server__Status__Response
         assert response.obj() == __(success=True,
-                                    status=__(api=__(version=version__mgraph_ai_service__html_transformation_workbench,
+                                    status=__(api=__(version=version__issues_fs,
                                                      build_date='NA',
                                                      environment='development',
                                                      python_version=python_version,

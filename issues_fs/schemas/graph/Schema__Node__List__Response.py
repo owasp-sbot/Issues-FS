@@ -6,7 +6,7 @@
 from typing                                                                                  import List
 from osbot_utils.type_safe.Type_Safe                                                         import Type_Safe
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text                 import Safe_Str__Text
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Summary          import Schema__Node__Summary
+from issues_fs.schemas.graph.Schema__Node__Summary          import Schema__Node__Summary
 
 
 class Schema__Node__List__Response(Type_Safe):                                   # List nodes response

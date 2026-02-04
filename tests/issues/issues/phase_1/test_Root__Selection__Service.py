@@ -5,10 +5,10 @@
 from unittest                                                                                           import TestCase
 from memory_fs.helpers.Memory_FS__In_Memory                                                             import Memory_FS__In_Memory
 from osbot_utils.utils.Json                                                                             import json_dumps
-from mgraph_ai_ui_html_transformation_workbench.schemas.issues.phase_1.Schema__Root                     import Schema__Root__Select__Request
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository         import Graph__Repository
-from mgraph_ai_ui_html_transformation_workbench.service.issues.phase_1.Root__Selection__Service         import Root__Selection__Service
-from mgraph_ai_ui_html_transformation_workbench.service.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node
+from issues_fs.schemas.issues.phase_1.Schema__Root                     import Schema__Root__Select__Request
+from issues_fs.issues.graph_services.Graph__Repository         import Graph__Repository
+from issues_fs.issues.phase_1.Root__Selection__Service         import Root__Selection__Service
+from issues_fs.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node
 
 
 class test_Root__Selection__Service(TestCase):

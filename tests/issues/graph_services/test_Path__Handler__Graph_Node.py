@@ -6,8 +6,8 @@
 from unittest                                                                                           import TestCase
 from osbot_utils.type_safe.Type_Safe                                                                    import Type_Safe
 from osbot_utils.utils.Objects                                                                          import base_classes
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Node_Label
-from mgraph_ai_ui_html_transformation_workbench.service.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node
+from issues_fs.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Node_Label
+from issues_fs.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node
 
 
 class test_Path__Handler__Graph_Node(TestCase):

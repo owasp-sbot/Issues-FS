@@ -9,8 +9,8 @@ from osbot_utils.testing.__ import __
 from osbot_utils.utils.Files                                                                                import temp_folder, folder_delete_recursively
 from memory_fs.storage_fs.providers.Storage_FS__Local_Disk                                                  import Storage_FS__Local_Disk
 from memory_fs.storage_fs.providers.Storage_FS__Memory                                                      import Storage_FS__Memory
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Storage__Status                      import Schema__Storage__Status
-from mgraph_ai_ui_html_transformation_workbench.service.issues.status.Storage__Status__Service              import Storage__Status__Service
+from issues_fs.schemas.status.Schema__Storage__Status                      import Schema__Storage__Status
+from issues_fs.issues.status.Storage__Status__Service              import Storage__Status__Service
 
 
 

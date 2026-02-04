@@ -6,10 +6,10 @@
 from unittest                                                                                           import TestCase
 from memory_fs.helpers.Memory_FS__In_Memory                                                             import Memory_FS__In_Memory
 from osbot_utils.utils.Json                                                                             import json_dumps
-from mgraph_ai_ui_html_transformation_workbench.schemas.issues.phase_1.Schema__Issue__Children          import Schema__Issue__Child__Create
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository         import Graph__Repository
-from mgraph_ai_ui_html_transformation_workbench.service.issues.phase_1.Issue__Children__Service         import Issue__Children__Service
-from mgraph_ai_ui_html_transformation_workbench.service.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node
+from issues_fs.schemas.issues.phase_1.Schema__Issue__Children          import Schema__Issue__Child__Create
+from issues_fs.issues.graph_services.Graph__Repository         import Graph__Repository
+from issues_fs.issues.phase_1.Issue__Children__Service         import Issue__Children__Service
+from issues_fs.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node
 
 
 class test_Issue__Children__Service(TestCase):

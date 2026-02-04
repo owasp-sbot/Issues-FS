@@ -17,7 +17,7 @@ from osbot_utils.type_safe.Type_Safe                                            
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                               import type_safe
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path            import Safe_Str__File__Path
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Name            import Safe_Str__File__Name
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types          import Safe_Str__Node_Type, Safe_Str__Node_Label
+from issues_fs.schemas.graph.Safe_Str__Graph_Types          import Safe_Str__Node_Type, Safe_Str__Node_Label
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

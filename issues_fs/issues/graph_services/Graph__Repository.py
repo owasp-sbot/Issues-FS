@@ -14,13 +14,13 @@ from memory_fs.storage_fs.Storage_FS                                            
 from osbot_utils.type_safe.Type_Safe                                                                    import Type_Safe
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                                          import type_safe
 from osbot_utils.utils.Json                                                                             import json_loads, json_dumps
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Node_Label
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Global__Index                     import Schema__Global__Index
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node                              import Schema__Node
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Type                        import Schema__Node__Type
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Link__Type                        import Schema__Link__Type
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Type__Index                       import Schema__Type__Index
-from mgraph_ai_ui_html_transformation_workbench.service.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node
+from issues_fs.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Node_Label
+from issues_fs.schemas.graph.Schema__Global__Index                     import Schema__Global__Index
+from issues_fs.schemas.graph.Schema__Node                              import Schema__Node
+from issues_fs.schemas.graph.Schema__Node__Type                        import Schema__Node__Type
+from issues_fs.schemas.graph.Schema__Link__Type                        import Schema__Link__Type
+from issues_fs.schemas.graph.Schema__Type__Index                       import Schema__Type__Index
+from issues_fs.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node
 
 
 class Graph__Repository(Type_Safe):                                              # Memory-FS based graph repository

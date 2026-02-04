@@ -6,9 +6,9 @@ from typing                                                                     
 from osbot_utils.type_safe.Type_Safe                                                import Type_Safe
 from osbot_utils.type_safe.primitives.core.Safe_UInt                                import Safe_UInt
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text        import Safe_Str__Text
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types import Safe_Str__Node_Label
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Graph__Link   import Schema__Graph__Link
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Graph__Node   import Schema__Graph__Node
+from issues_fs.schemas.graph.Safe_Str__Graph_Types import Safe_Str__Node_Label
+from issues_fs.schemas.graph.Schema__Graph__Link   import Schema__Graph__Link
+from issues_fs.schemas.graph.Schema__Graph__Node   import Schema__Graph__Node
 
 
 

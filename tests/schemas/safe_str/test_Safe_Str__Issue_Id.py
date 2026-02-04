@@ -6,7 +6,7 @@ from unittest                                                                   
 from osbot_utils.type_safe.Type_Safe__Primitive                                     import Type_Safe__Primitive
 from osbot_utils.type_safe.primitives.core.Safe_Str                                 import Safe_Str
 from osbot_utils.utils.Objects                                                      import base_types
-from mgraph_ai_ui_html_transformation_workbench.schemas.safe_str.Safe_Str__Issue_Id import Safe_Str__Issue_Id
+from issues_fs.schemas.safe_str.Safe_Str__Issue_Id import Safe_Str__Issue_Id
 
 
 class test_Safe_Str__Issue_Id(TestCase):

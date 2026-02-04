@@ -5,7 +5,7 @@
 
 from osbot_utils.type_safe.Type_Safe                                                         import Type_Safe
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text                 import Safe_Str__Text
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node                   import Schema__Node
+from issues_fs.schemas.graph.Schema__Node                   import Schema__Node
 
 
 class Schema__Node__Update__Response(Type_Safe):                                 # Update node response

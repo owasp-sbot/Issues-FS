@@ -5,7 +5,7 @@
 
 from osbot_utils.type_safe.Type_Safe                                                        import Type_Safe
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text                import Safe_Str__Text
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types         import Safe_Str__Node_Label, Safe_Str__Node_Type, Safe_Str__Status
+from issues_fs.schemas.graph.Safe_Str__Graph_Types         import Safe_Str__Node_Label, Safe_Str__Node_Type, Safe_Str__Status
 
 
 class Schema__Node__Summary(Type_Safe):                                          # Node summary for listings

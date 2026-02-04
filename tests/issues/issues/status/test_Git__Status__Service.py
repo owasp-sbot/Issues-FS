@@ -5,8 +5,8 @@
 
 from unittest                                                                              import TestCase
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path          import Safe_Str__File__Path
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Git__Status         import Schema__Git__Status
-from mgraph_ai_ui_html_transformation_workbench.service.issues.status.Git__Status__Service import Git__Status__Service
+from issues_fs.schemas.status.Schema__Git__Status         import Schema__Git__Status
+from issues_fs.issues.status.Git__Status__Service import Git__Status__Service
 
 
 class test_Git__Status__Service(TestCase):

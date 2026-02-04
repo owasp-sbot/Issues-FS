@@ -6,7 +6,7 @@ from typing                                                                     
 from osbot_utils.type_safe.Type_Safe                                             import Type_Safe
 from osbot_utils.type_safe.primitives.core.Safe_UInt                             import Safe_UInt
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text     import Safe_Str__Text
-from mgraph_ai_ui_html_transformation_workbench.schemas.safe_str.Safe_Str__Hex_Color import Safe_Str__Hex_Color
+from issues_fs.schemas.safe_str.Safe_Str__Hex_Color import Safe_Str__Hex_Color
 
 
 class Schema__Node__Type__Summary(Type_Safe):                                    # Node type summary

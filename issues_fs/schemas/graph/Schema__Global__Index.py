@@ -7,7 +7,7 @@ from typing                                                                     
 from osbot_utils.type_safe.Type_Safe                                                         import Type_Safe
 from osbot_utils.type_safe.primitives.core.Safe_UInt                                         import Safe_UInt
 from osbot_utils.type_safe.primitives.domains.identifiers.safe_int.Timestamp_Now             import Timestamp_Now
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Type__Summary          import Schema__Type__Summary
+from issues_fs.schemas.graph.Schema__Type__Summary          import Schema__Type__Summary
 
 
 class Schema__Global__Index(Type_Safe):                                          # Global index file (.issues/_index.json)

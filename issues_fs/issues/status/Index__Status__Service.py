@@ -7,10 +7,10 @@ from typing                                                                     
 from osbot_utils.type_safe.Type_Safe                                                                        import Type_Safe
 from osbot_utils.type_safe.primitives.core.Safe_UInt                                                        import Safe_UInt
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text                                import Safe_Str__Text
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Index__Status                        import Schema__Index__Status
-from mgraph_ai_ui_html_transformation_workbench.schemas.status.Schema__Index__Status                        import Schema__Type__Count
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository             import Graph__Repository
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Type__Service                 import Type__Service
+from issues_fs.schemas.status.Schema__Index__Status                        import Schema__Index__Status
+from issues_fs.schemas.status.Schema__Index__Status                        import Schema__Type__Count
+from issues_fs.issues.graph_services.Graph__Repository             import Graph__Repository
+from issues_fs.issues.graph_services.Type__Service                 import Type__Service
 
 # todo: see why we are using type_service below and not index_service
 

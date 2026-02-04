@@ -10,11 +10,11 @@ from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text    
 from osbot_utils.type_safe.primitives.domains.identifiers.Obj_Id                                        import Obj_Id
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                                          import type_safe
 
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Status, Safe_Str__Node_Type_Display, Safe_Str__Link_Verb
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Type                        import Schema__Node__Type
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Link__Type                        import Schema__Link__Type
-from mgraph_ai_ui_html_transformation_workbench.schemas.safe_str.Safe_Str__Hex_Color                    import Safe_Str__Hex_Color
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository         import Graph__Repository
+from issues_fs.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Status, Safe_Str__Node_Type_Display, Safe_Str__Link_Verb
+from issues_fs.schemas.graph.Schema__Node__Type                        import Schema__Node__Type
+from issues_fs.schemas.graph.Schema__Link__Type                        import Schema__Link__Type
+from issues_fs.schemas.safe_str.Safe_Str__Hex_Color                    import Safe_Str__Hex_Color
+from issues_fs.issues.graph_services.Graph__Repository         import Graph__Repository
 
 
 class Type__Service(Type_Safe):                                                  # Type definition service

@@ -4,10 +4,9 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 
 from unittest                                                                                       import TestCase
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Safe_Str__Graph_Types                 import Safe_Str__Node_Type, Safe_Str__Node_Label
-from mgraph_ai_ui_html_transformation_workbench.schemas.graph.Schema__Node__Create__Request         import Schema__Node__Create__Request
-from mgraph_ai_ui_html_transformation_workbench.schemas.issues.Schema__Comment                      import Schema__Comment__Create__Request, Schema__Comment__Update__Request
-from tests.unit.Html_Transformation_Workbench__Test_Objs                                            import setup__html_transformation_workbench__test_objs
+from issues_fs.schemas.graph.Safe_Str__Graph_Types                 import Safe_Str__Node_Type, Safe_Str__Node_Label
+from issues_fs.schemas.graph.Schema__Node__Create__Request         import Schema__Node__Create__Request
+from issues_fs.schemas.issues.Schema__Comment                      import Schema__Comment__Create__Request, Schema__Comment__Update__Request
 
 
 class test_Comments__Service(TestCase):

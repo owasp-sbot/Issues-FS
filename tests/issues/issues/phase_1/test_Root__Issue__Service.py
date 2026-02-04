@@ -4,9 +4,9 @@
 
 from unittest                                                                                           import TestCase
 from memory_fs.helpers.Memory_FS__In_Memory                                                             import Memory_FS__In_Memory
-from mgraph_ai_ui_html_transformation_workbench.service.issues.graph_services.Graph__Repository         import Graph__Repository
-from mgraph_ai_ui_html_transformation_workbench.service.issues.phase_1.Root__Issue__Service             import Root__Issue__Service, ROOT_ISSUE_TYPE, ROOT_ISSUE_LABEL, ROOT_ISSUE_DEFAULT_TITLE, ROOT_ISSUE_STATUS
-from mgraph_ai_ui_html_transformation_workbench.service.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node
+from issues_fs.issues.graph_services.Graph__Repository         import Graph__Repository
+from issues_fs.issues.phase_1.Root__Issue__Service             import Root__Issue__Service, ROOT_ISSUE_TYPE, ROOT_ISSUE_LABEL, ROOT_ISSUE_DEFAULT_TITLE, ROOT_ISSUE_STATUS
+from issues_fs.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node
 
 
 class test_Root__Issue__Service(TestCase):
