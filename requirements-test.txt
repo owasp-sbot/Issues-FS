@@ -1,5 +1,6 @@
-# for testing
 osbot-utils
+memory-fs
+
+# for testing
 pytest
 pytest-cov
-requests

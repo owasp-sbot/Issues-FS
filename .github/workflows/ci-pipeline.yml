@@ -10,9 +10,6 @@ on:
         required: false
         type: string
         default: ""
-      target_deploy:
-        required: true
-        type: string
       should_increment_tag:
         required: false
         type: boolean
@@ -21,18 +18,9 @@ on:
         required: false
         type: boolean
         default: false
-    secrets:
-      AWS_SECRET_ACCESS_KEY:
-        required: false
-      AWS_DEFAULT_REGION:
-        required: false
-      AWS_ACCOUNT_ID:
-        required: false
-      AWS_ACCESS_KEY_ID:
-        required: false
 
 env:
-  PACKAGE_NAME: 'mgraph_ai_ui_html_transformation_workbench'
+  PACKAGE_NAME: 'issues_fs'
 
 jobs:
   run-tests:
@@ -58,49 +46,6 @@ jobs:
         uses: owasp-sbot/OSBot-GitHub-Actions/.github/actions/git__increment-tag@dev
         with:
           release_type: ${{ inputs.release_type }}
-
-      - name: Skip Tag Increment
-        if: '!inputs.should_increment_tag'
-        run: echo "✅ Skipping tag increment for ${{ inputs.target_deploy }} deployment"
-
-  check-aws-credentials:
-    name: Check AWS Credentials
-    runs-on: ubuntu-latest
-    needs: [run-tests]
-    outputs:
-      has-credentials: ${{ steps.check.outputs.has-credentials }}
-    steps:
-      - name: Check if AWS credentials are configured
-        id: check
-        run: |
-          if [[ -n "${{ secrets.AWS_ACCESS_KEY_ID }}" ]] && \
-             [[ -n "${{ secrets.AWS_SECRET_ACCESS_KEY }}" ]] && \
-             [[ -n "${{ secrets.AWS_DEFAULT_REGION }}" ]] && \
-             [[ -n "${{ secrets.AWS_ACCOUNT_ID }}" ]]; then
-            echo "has-credentials=true" >> $GITHUB_OUTPUT
-            echo "✅ AWS credentials are configured"
-          else
-            echo "has-credentials=false" >> $GITHUB_OUTPUT
-            echo "⚠️  AWS credentials are not configured - deployment will be skipped"
-          fi
-
-  aws_deploy_lambda:
-    if: needs.check-aws-credentials.outputs.has-credentials == 'true'
-    name: Deploy to AWS Lambda
-    runs-on: ubuntu-latest
-    needs: [check-aws-credentials, increment-tag]
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy Lambda function
-        uses: ./.github/actions/aws__deploy__lambda
-        env:
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION   : ${{ secrets.AWS_DEFAULT_REGION }}
-          AWS_ACCOUNT_ID       : ${{ secrets.AWS_ACCOUNT_ID }}
-          AWS_ACCESS_KEY_ID    : ${{ secrets.AWS_ACCESS_KEY_ID }}
-        with:
-          target: ${{ inputs.target_deploy }}
 
   publish-to-pypi:
     if: inputs.should_publish_pypi && needs.increment-tag.result == 'success'

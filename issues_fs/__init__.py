@@ -1,2 +1,2 @@
-package_name = 'mgraph_ai_ui_html_transformation_workbench'
+package_name = 'issues_fs'
 path         = __path__[0]
