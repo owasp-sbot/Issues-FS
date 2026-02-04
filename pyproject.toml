@@ -1,12 +1,12 @@
 [tool.poetry]
-name        = "memory_fs"
-version     = "v0.41.0"
-description = "Memory-FS"
+name        = "issues_fs"
+version     = "v0.1.0"
+description = "Issues-FS"
 authors     = ["Dinis Cruz <dinis.cruz@owasp.org>"]
 license     = "Apache 2.0"
 readme      = "README.md"
-homepage    = "https://github.com/owasp-sbot/Memory-FS"
-repository  = "https://github.com/owasp-sbot/Memory-FS"
+homepage    = "https://github.com/owasp-sbot/Issues-FS"
+repository  = "https://github.com/owasp-sbot/Issues-FS"
 
 [tool.poetry.dependencies]
 python            = "^3.12"

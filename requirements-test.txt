@@ -2,4 +2,3 @@
 osbot-utils
 pytest
 pytest-cov
-requests

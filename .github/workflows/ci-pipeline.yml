@@ -32,7 +32,7 @@ on:
         required: false
 
 env:
-  PACKAGE_NAME: 'mgraph_ai_ui_html_transformation_workbench'
+  PACKAGE_NAME: 'issues_fs'
 
 jobs:
   run-tests:
