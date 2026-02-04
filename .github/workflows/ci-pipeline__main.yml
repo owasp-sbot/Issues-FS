@@ -12,5 +12,5 @@ jobs:
       git_branch          : 'main'
       release_type        : 'major'
       should_increment_tag: true
-      should_publish_pypi : false
+      should_publish_pypi : true
     secrets: inherit
