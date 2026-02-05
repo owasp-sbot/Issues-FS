@@ -1,6 +1,6 @@
 [tool.poetry]
 name        = "issues_fs"
-version     = "v0.4.1"
+version     = "v0.4.2"
 description = "Issues-FS"
 authors     = ["Dinis Cruz <dinis.cruz@owasp.org>"]
 license     = "Apache 2.0"
