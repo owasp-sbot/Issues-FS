@@ -12,6 +12,7 @@ repository  = "https://github.com/owasp-sbot/Issues-FS"
 python            = "^3.12"
 osbot-utils       = "*"
 memory_fs         = "*"
+issues-fs-cli     = "*"
 
 [build-system]
 requires = ["poetry-core>=1.9.1"]
