@@ -1,0 +1,20 @@
+{
+  "node_id": "a1b2c3d9",
+  "node_type": "task",
+  "node_index": 10,
+  "label": "Task-10",
+  "title": "MGraphDB sync service (B19)",
+  "status": "todo",
+  "tags": ["phase-2", "refactoring", "B19"],
+  "properties": {
+    "brief_task_id": "B19",
+    "target_files": [
+      "issues_fs/services/__init__.py",
+      "issues_fs/services/mgraph/__init__.py",
+      "issues_fs/services/mgraph/MGraph__Issues__Sync__Service.py"
+    ],
+    "depends_on": ["Task-1", "Task-2", "Task-9"],
+    "has_provided_code": true,
+    "description": "Create services/mgraph package. Create MGraph__Issues__Sync__Service with lazy loading (ensure_loaded), root change support (on_root_change), full sync from filesystem (full_sync), containment edge building (build_containment_edges), parent path inference (infer_parent_path), and persistence to indexes/issues.mgraph.json (save_to_disk, load_from_disk). Rewrite imports from mgraph_ai_ui_html_transformation_workbench to issues_fs."
+  }
+}

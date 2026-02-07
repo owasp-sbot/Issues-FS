@@ -1,0 +1,18 @@
+{
+  "node_id": "a1b2c3da",
+  "node_type": "task",
+  "node_index": 11,
+  "label": "Task-11",
+  "title": "MGraphDB query endpoints (B20)",
+  "status": "todo",
+  "tags": ["phase-2", "refactoring", "B20", "cross-repo"],
+  "properties": {
+    "brief_task_id": "B20",
+    "target_files": [
+      "CROSS-REPO: Issues-FS__Service routes/Routes__Graph.py"
+    ],
+    "depends_on": ["Task-9", "Task-10"],
+    "has_provided_code": true,
+    "description": "Create Routes__Graph with query endpoints: GET /api/graph/nodes, GET /api/graph/node/{label}, GET /api/graph/node/{label}/children, GET /api/graph/node/{label}/ancestors, POST /api/graph/sync. NOTE: This file belongs in Issues-FS__Service repo, not issues_fs core. Stage with rewritten imports for later integration."
+  }
+}

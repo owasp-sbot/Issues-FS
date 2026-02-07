@@ -1,0 +1,20 @@
+{
+  "node_id": "a1b2c3d8",
+  "node_type": "task",
+  "node_index": 9,
+  "label": "Task-9",
+  "title": "MGraphDB schema and domain layer design (B18)",
+  "status": "todo",
+  "tags": ["phase-2", "refactoring", "B18"],
+  "properties": {
+    "brief_task_id": "B18",
+    "target_files": [
+      "issues_fs/mgraph/__init__.py",
+      "issues_fs/mgraph/Schema__MGraph__Issues.py",
+      "issues_fs/mgraph/MGraph__Issues__Domain.py"
+    ],
+    "depends_on": [],
+    "has_provided_code": true,
+    "description": "Create MGraph package. Create Schema__MGraph__Issue__Node, Schema__MGraph__Issue__Edge, Schema__MGraph__Issues__Data (schema layer -- pure data, no methods). Create MGraph__Issues__Domain (domain layer -- indexes and query methods: add_node, get_node_by_label, get_node_by_path, add_edge, get_children, get_ancestors, clear, all_nodes). Rewrite imports from mgraph_ai_ui_html_transformation_workbench to issues_fs."
+  }
+}

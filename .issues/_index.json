@@ -1,0 +1,48 @@
+{
+  "total_issues": 13,
+  "last_updated": "2026-02-07",
+  "types": {
+    "task": {
+      "count": 13,
+      "next_index": 14,
+      "labels": [
+        "Task-1",
+        "Task-2",
+        "Task-3",
+        "Task-4",
+        "Task-5",
+        "Task-6",
+        "Task-7",
+        "Task-8",
+        "Task-9",
+        "Task-10",
+        "Task-11",
+        "Task-12",
+        "Task-13"
+      ]
+    }
+  },
+  "status_summary": {
+    "todo": 13,
+    "in-progress": 0,
+    "done": 0
+  },
+  "tags": {
+    "phase-2": 13,
+    "refactoring": 13,
+    "B10": 1,
+    "B11": 1,
+    "B12": 1,
+    "B13": 1,
+    "B14": 1,
+    "B15": 1,
+    "B16": 1,
+    "B17": 1,
+    "B18": 1,
+    "B19": 1,
+    "B20": 1,
+    "B21": 1,
+    "B22": 1,
+    "cross-repo": 2
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "node_id": "a1b2c3db",
+  "node_type": "task",
+  "node_index": 12,
+  "label": "Task-12",
+  "title": "Graph visualisation endpoints (B21)",
+  "status": "todo",
+  "tags": ["phase-2", "refactoring", "B21", "cross-repo"],
+  "properties": {
+    "brief_task_id": "B21",
+    "target_files": [
+      "CROSS-REPO: Issues-FS__Service routes/Routes__Graph.py"
+    ],
+    "depends_on": ["Task-9", "Task-10", "Task-11"],
+    "has_provided_code": true,
+    "description": "Add visualisation endpoints to Routes__Graph: GET /api/graph/viz/tree (D3 hierarchy format), GET /api/graph/viz/force (force-directed format). Includes helper methods find_root_node() and build_tree_recursive(). NOTE: This file belongs in Issues-FS__Service repo, not issues_fs core."
+  }
+}

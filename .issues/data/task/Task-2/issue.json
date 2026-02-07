@@ -1,0 +1,20 @@
+{
+  "node_id": "a1b2c3d1",
+  "node_type": "task",
+  "node_index": 2,
+  "label": "Task-2",
+  "title": "Path-based node loading (B11)",
+  "status": "todo",
+  "tags": ["phase-2", "refactoring", "B11"],
+  "properties": {
+    "brief_task_id": "B11",
+    "target_files": [
+      "issues_fs/issues/graph_services/Graph__Repository.py",
+      "issues_fs/issues/graph_services/Node__Service.py",
+      "issues_fs/schemas/graph/Schema__Node__Response.py"
+    ],
+    "depends_on": ["Task-1"],
+    "has_provided_code": true,
+    "description": "Add node_load_by_path(), node_find_path_by_label(), node_load_by_label() to Graph__Repository. Add get_node_by_path() to Node__Service. Create Schema__Node__Response schema (success, node, message). Rewrite imports from mgraph_ai_ui_html_transformation_workbench to issues_fs."
+  }
+}
