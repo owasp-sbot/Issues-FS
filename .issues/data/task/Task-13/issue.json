@@ -1,0 +1,18 @@
+{
+  "node_id": "a1b2c3dc",
+  "node_type": "task",
+  "node_index": 13,
+  "label": "Task-13",
+  "title": "Hyphenated label support (B22)",
+  "status": "todo",
+  "tags": ["phase-2", "refactoring", "B22"],
+  "properties": {
+    "brief_task_id": "B22",
+    "target_files": [
+      "issues_fs/issues/graph_services/Node__Service.py"
+    ],
+    "depends_on": [],
+    "has_provided_code": true,
+    "description": "Rewrite label_from_type_and_index() to produce hyphenated labels (user-story --> User-Story-5). Add type_to_label_prefix() helper. Add parse_label_to_type() for reverse operation matching against known types (longest first). Update resolve_link_target() (renamed from _resolve_link_target) to use parse_label_to_type(). Rename _traverse_graph to traverse_graph and _find_incoming_links to find_incoming_links (remove underscore prefix per coding patterns)."
+  }
+}

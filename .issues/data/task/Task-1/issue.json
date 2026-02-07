@@ -1,0 +1,19 @@
+{
+  "node_id": "a1b2c3d0",
+  "node_type": "task",
+  "node_index": 1,
+  "label": "Task-1",
+  "title": "Recursive node discovery (B10)",
+  "status": "todo",
+  "tags": ["phase-2", "refactoring", "B10"],
+  "properties": {
+    "brief_task_id": "B10",
+    "target_files": [
+      "issues_fs/schemas/graph/Schema__Node__Info.py",
+      "issues_fs/issues/graph_services/Graph__Repository.py"
+    ],
+    "depends_on": [],
+    "has_provided_code": true,
+    "description": "Create Schema__Node__Info schema and add nodes_list_all(), is_path_under_root(), extract_node_type_from_file() methods to Graph__Repository. Replace existing nodes_list_labels() to use recursive discovery. Add SKIP_LABELS class attribute. Rewrite imports from mgraph_ai_ui_html_transformation_workbench to issues_fs."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "node_id": "a1b2c3d3",
+  "node_type": "task",
+  "node_index": 4,
+  "label": "Task-4",
+  "title": "Remove node.json read fallback and create migration script (B13)",
+  "status": "todo",
+  "tags": ["phase-2", "refactoring", "B13"],
+  "properties": {
+    "brief_task_id": "B13",
+    "target_files": [
+      "issues_fs/issues/graph_services/Graph__Repository.py",
+      "issues_fs/issues/phase_1/Root__Selection__Service.py",
+      "issues_fs/issues/phase_1/Issue__Children__Service.py",
+      "issues_fs/scripts/migrate_node_to_issue_json.py"
+    ],
+    "depends_on": ["Task-3"],
+    "has_provided_code": true,
+    "description": "Remove node.json fallback from get_issue_file_path() in Graph__Repository. Remove node.json references from Root__Selection__Service (is_valid_root, scan_for_issue_folders, load_issue_summary, count_top_level_issues, count_children_in_folder). Remove node.json references from Issue__Children__Service (parent_exists, scan_child_folders, load_child_summary). Create migration script migrate_node_to_issue_json.py. CRITICAL: Migration must run BEFORE deploying these changes."
+  }
+}
