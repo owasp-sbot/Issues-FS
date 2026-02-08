@@ -4,7 +4,7 @@
   "node_index": 1,
   "label": "Bug-1",
   "title": "Dev agent replaced Safe_Str__File__Path with raw str in B13 refactoring — type safety regression",
-  "status": "confirmed",
+  "status": "resolved",
   "tags": ["type-safety", "regression", "P1", "phase-2", "B13", "review-needed"],
   "properties": {
     "priority": "P1",
