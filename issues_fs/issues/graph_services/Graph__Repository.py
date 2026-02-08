@@ -128,7 +128,7 @@ class Graph__Repository(Type_Safe):                                             
     def get_issue_file_path(self                              ,                  # Get issue file path (issue.json only)
                             node_type : Safe_Str__Node_Type   ,
                             label     : Safe_Str__Node_Label
-                       ) -> str:
+                       ) -> Safe_Str__File__Path:
         path_issue = self.path_handler.path_for_issue_json(node_type, label)
 
         if self.storage_fs.file__exists(path_issue) is True:
@@ -189,7 +189,7 @@ class Graph__Repository(Type_Safe):                                             
     @type_safe
     def extract_node_type_from_file(self                              ,          # Get node_type from JSON file
                                     file_path : Safe_Str__File__Path
-                               ) -> str:
+                               ) -> Safe_Str__Node_Type:
         try:
             content = self.storage_fs.file__str(str(file_path))
             if content:
@@ -232,7 +232,7 @@ class Graph__Repository(Type_Safe):                                             
         for path in all_paths:
             if path.endswith(f'/{label_str}/issue.json'):
                 folder_path = path.rsplit('/issue.json', 1)[0]
-                return Safe_Str__File__Path(folder_path)
+                return folder_path
 
         return None
 

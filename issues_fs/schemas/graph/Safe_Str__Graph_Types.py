@@ -25,7 +25,7 @@ class Safe_Str__Node_Type(Safe_Str):                                            
 
 class Safe_Str__Node_Label(Safe_Str):                                            # Node label like "Bug-27"
     max_length        = 100
-    regex             = re.compile(r'^[A-Z][a-zA-Z]*-\d{1,5}$')                  # PascalCase-N (e.g., UserStory-1)
+    regex             = re.compile(r'^[A-Z][a-zA-Z]*(-[A-Z][a-zA-Z]*)*-\d{1,5}$')  # Word(-Word)*-N (e.g., Git-Repo-1)
     regex_mode        = Enum__Safe_Str__Regex_Mode.MATCH
     strict_validation = True
 

@@ -1,5 +1,5 @@
 {
-  "total_issues": 19,
+  "total_issues": 22,
   "last_updated": "2026-02-08",
   "types": {
     "task": {
@@ -13,16 +13,16 @@
       ]
     },
     "bug": {
-      "count": 3,
-      "next_index": 4,
-      "labels": ["Bug-1", "Bug-2", "Bug-3"]
+      "count": 6,
+      "next_index": 7,
+      "labels": ["Bug-1", "Bug-2", "Bug-3", "Bug-4", "Bug-5", "Bug-6"]
     }
   },
   "status_summary": {
     "todo": 14,
     "in-progress": 0,
     "done": 4,
-    "confirmed": 3
+    "confirmed": 6
   },
   "tags": {
     "phase-2": 14,
@@ -33,9 +33,11 @@
     "knowledge-request": 2,
     "convention": 1,
     "traceability": 1,
-    "type-safety": 3,
-    "regression": 3,
-    "review-needed": 1,
+    "type-safety": 4,
+    "regression": 4,
+    "review-needed": 2,
+    "data-consistency": 1,
+    "logic-error": 1,
     "workflow": 1,
     "reusable": 1,
     "B10": 1, "B11": 1, "B12": 1, "B13": 2,

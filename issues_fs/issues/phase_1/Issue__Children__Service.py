@@ -213,7 +213,7 @@ class Issue__Children__Service(Type_Safe):                                      
     @type_safe
     def scan_child_folders(self,                                                        # Find all child folders in issues/
                            issues_folder: Safe_Str__File__Path
-                      ) -> List[str]:
+                      ) -> List[Safe_Str__File__Path]:
         folders   = set()
         all_paths = self.repository.storage_fs.files__paths()
         prefix    = f"{issues_folder}/"
