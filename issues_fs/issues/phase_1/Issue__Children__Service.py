@@ -1,6 +1,6 @@
-# ═══════════════════════════════════════════════════════════════════════════════
 # Issue__Children__Service - Service for managing child issues in issues/ folders
 # Phase 1: Enables adding children to issues and converting to hierarchical structure
+# Phase 2 (B13): Removed node.json fallback - issue.json only
 #
 # Key Operations:
 #   - add_child_issue: Create a child issue in parent's issues/ folder
@@ -42,7 +42,7 @@ class Issue__Children__Service(Type_Safe):                                      
                         parent_path : Safe_Str__File__Path                    ,  # Path to parent (relative or full)
                         child_data  : Schema__Issue__Child__Create
                    ) -> Schema__Issue__Child__Response:
-        full_parent_path = self.resolve_full_path(str(parent_path))              # Resolve parent path
+        full_parent_path = self.resolve_full_path(parent_path)                   # Resolve parent path
 
         if self.parent_exists(full_parent_path) is False:                        # Validate parent exists
             return Schema__Issue__Child__Response(success = False                                  ,
@@ -51,7 +51,7 @@ class Issue__Children__Service(Type_Safe):                                      
         issues_folder = f"{full_parent_path}/issues"                             # Ensure issues/ folder exists
         self.ensure_folder_exists(issues_folder)
 
-        child_type  = str(child_data.issue_type)                                 # Generate label for child
+        child_type  = child_data.issue_type                                      # Generate label for child
         child_label = self.generate_child_label(issues_folder, child_type)
 
         child_folder = f"{issues_folder}/{child_label}"                          # Create child folder
@@ -62,8 +62,8 @@ class Issue__Children__Service(Type_Safe):                                      
                                    node_type   = Safe_Str__Node_Type(child_type)                ,
                                    node_index  = self.extract_index_from_label(child_label)     ,
                                    label       = Safe_Str__Node_Label(child_label)              ,
-                                   title       = str(child_data.title)                          ,
-                                   description = str(child_data.description) if child_data.description else '',
+                                   title       = child_data.title                          ,
+                                   description = child_data.description if child_data.description else '',
                                    status      = Safe_Str__Status(str(child_data.status)) if child_data.status else Safe_Str__Status('backlog'),
                                    created_at  = now                                            ,
                                    updated_at  = now                                            ,
@@ -187,19 +187,12 @@ class Issue__Children__Service(Type_Safe):                                      
     # ═══════════════════════════════════════════════════════════════════════════════
 
     def parent_exists(self, folder_path: str) -> bool:                           # Check if parent issue exists
-        issue_json = f"{folder_path}/{FILE_NAME__ISSUE_JSON}" if folder_path else FILE_NAME__ISSUE_JSON
-        node_json  = f"{folder_path}/node.json" if folder_path else "node.json"
-
-        if self.repository.storage_fs.file__exists(issue_json):
-            return True
-        if self.repository.storage_fs.file__exists(node_json):
-            return True
-
         base_path = str(self.path_handler.base_path)                             # Root is always valid parent
         if not folder_path or folder_path == base_path or folder_path == '.' or folder_path == '':
             return True
 
-        return False
+        issue_path = f"{folder_path}/{FILE_NAME__ISSUE_JSON}"
+        return self.repository.storage_fs.file__exists(issue_path)               # Phase 2: issue.json only
 
     def folder_exists(self, folder_path: str) -> bool:                           # Check if folder exists (has any files)
         all_paths = self.repository.storage_fs.files__paths()
@@ -220,7 +213,7 @@ class Issue__Children__Service(Type_Safe):                                      
     @type_safe
     def scan_child_folders(self,                                                        # Find all child folders in issues/
                            issues_folder: Safe_Str__File__Path
-                      ) -> List[Safe_Str__File__Path]:
+                      ) -> List[str]:
         folders   = set()
         all_paths = self.repository.storage_fs.files__paths()
         prefix    = f"{issues_folder}/"
@@ -236,10 +229,10 @@ class Issue__Children__Service(Type_Safe):                                      
                 child_folder = parts[0]                                          # First segment is child folder
                 filename     = parts[1]
 
-                if filename in (FILE_NAME__ISSUE_JSON, 'node.json'):
+                if filename == FILE_NAME__ISSUE_JSON:                            # Phase 2: issue.json only
                     folders.add(f"{issues_folder}/{child_folder}")
 
-        return folders
+        return list(folders)
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # Label Generation
@@ -314,19 +307,14 @@ class Issue__Children__Service(Type_Safe):                                      
 
     # todo: this should not be a raw dict
     def load_child_summary(self, child_folder: Safe_Str__File__Path) -> dict:                     # Load summary data for child
-        issue_path = f"{child_folder}/{FILE_NAME__ISSUE_JSON}"                   # Try issue.json first
-        data = self.load_issue_from_path(issue_path)
+        issue_path = f"{child_folder}/{FILE_NAME__ISSUE_JSON}"
+        data       = self.load_issue_from_path(issue_path)
+
         if data:
             data['path'] = self.make_relative_path(child_folder)
             return data
 
-        node_path = f"{child_folder}/node.json"                                  # Fall back to node.json
-        data = self.load_issue_from_path(node_path)
-        if data:
-            data['path'] = self.make_relative_path(child_folder)
-            return data
-
-        return None
+        return None                                                              # Phase 2: No node.json fallback
 
     # todo: this should not be a raw dict
     def load_issue_from_path(self, file_path: Safe_Str__File__Path) -> dict:                      # Load issue JSON from path

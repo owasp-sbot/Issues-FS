@@ -15,6 +15,12 @@
     ],
     "depends_on": [],
     "has_provided_code": true,
-    "description": "Create MGraph package. Create Schema__MGraph__Issue__Node, Schema__MGraph__Issue__Edge, Schema__MGraph__Issues__Data (schema layer -- pure data, no methods). Create MGraph__Issues__Domain (domain layer -- indexes and query methods: add_node, get_node_by_label, get_node_by_path, add_edge, get_children, get_ancestors, clear, all_nodes). Rewrite imports from mgraph_ai_ui_html_transformation_workbench to issues_fs."
+    "description": "Create MGraph package. Create Schema__MGraph__Issue__Node, Schema__MGraph__Issue__Edge, Schema__MGraph__Issues__Data (schema layer -- pure data, no methods). Create MGraph__Issues__Domain (domain layer -- indexes and query methods: add_node, get_node_by_label, get_node_by_path, add_edge, get_children, get_ancestors, clear, all_nodes). Rewrite imports from mgraph_ai_ui_html_transformation_workbench to issues_fs.",
+    "required_reading": [
+      "modules/Issues-FS__Docs/docs/library/mgraph-db/v1_10_6__mGraph-db__llm_briefing.md",
+      "modules/Issues-FS__Docs/docs/development/llm-briefs/type-safety/v3.63.4__for_llms__type_safe.md",
+      "modules/Issues-FS__Docs/docs/development/llm-briefs/type-safety/v3.28.0__for_llms__osbot-utils-safe-primitives.md"
+    ],
+    "dev_notes": "CRITICAL: Read the MGraph-DB LLM briefing BEFORE implementing. It contains the 4-layer architecture (Schema->Model->Domain->Action), naming conventions, and patterns that this implementation must follow exactly. Also read the Type_Safe and Safe primitives guides."
   }
 }

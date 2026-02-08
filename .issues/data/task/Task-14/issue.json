@@ -1,0 +1,41 @@
+{
+  "node_id": "a1b2c3e0",
+  "node_type": "task",
+  "node_index": 14,
+  "label": "Task-14",
+  "title": "Gather and catalogue all LLM guidance docs for ecosystem dependencies",
+  "status": "todo",
+  "tags": ["librarian", "documentation", "llm-briefs", "knowledge-request"],
+  "properties": {
+    "assigned_to": "Librarian",
+    "description": "The project owner has created LLM briefing/guidance documents for many of the ecosystem's dependencies over the past year (osbot-utils, MGraph-DB, etc.). These need to be gathered, catalogued, and made available to all agent roles -- especially the Dev and Architect roles who need them when implementing features. Currently some exist in modules/Issues-FS__Docs/docs/ but many may be scattered or not yet added to this repo.",
+    "deliverables": [
+      "Inventory of all existing LLM guidance docs (in Issues-FS__Docs and elsewhere)",
+      "Catalogue each doc with: dependency name, version, doc type (briefing, testing guide, formatting guide, safe primitives), file path",
+      "Identify gaps: which dependencies are missing guidance docs?",
+      "Organise docs under modules/Issues-FS__Docs/docs/library/<dependency-name>/ following the pattern already started with mgraph-db/",
+      "Update the project-brief.md to reference the guidance doc library",
+      "Create a finding-aid / index document that agents can read to discover available guidance"
+    ],
+    "known_docs": {
+      "mgraph-db": [
+        "modules/Issues-FS__Docs/docs/library/mgraph-db/v1_10_6__mGraph-db__llm_briefing.md"
+      ],
+      "type-safety": [
+        "modules/Issues-FS__Docs/docs/development/llm-briefs/type-safety/v3.63.4__for_llms__type_safe.md",
+        "modules/Issues-FS__Docs/docs/development/llm-briefs/type-safety/v3.28.0__for_llms__osbot-utils-safe-primitives.md",
+        "modules/Issues-FS__Docs/docs/development/llm-briefs/type-safety/v3.1.1__for_llms__type_safe__testing_guidance.md"
+      ],
+      "formatting": [
+        "modules/Issues-FS__Docs/docs/development/llm-briefs/v3.63.4__for_llms__python_formatting_guide.md"
+      ]
+    },
+    "likely_missing": [
+      "osbot-utils (general briefing beyond Type_Safe)",
+      "osbot-fast-api",
+      "Memory-FS",
+      "OSBot-GitHub-Actions"
+    ],
+    "notes": "The project owner has been creating these docs for the past year of development. Ask them about guidance docs for specific dependencies if the Librarian cannot find them in the repos."
+  }
+}

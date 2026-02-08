@@ -6,6 +6,12 @@
 #   - node_load: Reads issue.json first, falls back to node.json
 #   - node_save: Always writes to issue.json (preserves node.json for now)
 #   - node_exists: Checks for either issue.json or node.json
+#
+# Phase 2 Changes:
+#   - B10: nodes_list_all() for recursive discovery in issues/ folders
+#   - B11: node_load_by_path(), node_find_path_by_label() for path-based loading
+#   - B12: node_save() now deletes legacy node.json after saving
+#   - B13: get_issue_file_path() no longer falls back to node.json
 # ═══════════════════════════════════════════════════════════════════════════════
 
 from typing                                                                                             import List, Optional
@@ -13,14 +19,16 @@ from memory_fs.Memory_FS                                                        
 from memory_fs.storage_fs.Storage_FS                                                                    import Storage_FS
 from osbot_utils.type_safe.Type_Safe                                                                    import Type_Safe
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                                          import type_safe
+from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path                       import Safe_Str__File__Path
 from osbot_utils.utils.Json                                                                             import json_loads, json_dumps
-from issues_fs.schemas.graph.Safe_Str__Graph_Types                     import Safe_Str__Node_Type, Safe_Str__Node_Label
-from issues_fs.schemas.graph.Schema__Global__Index                     import Schema__Global__Index
-from issues_fs.schemas.graph.Schema__Node                              import Schema__Node
-from issues_fs.schemas.graph.Schema__Node__Type                        import Schema__Node__Type
-from issues_fs.schemas.graph.Schema__Link__Type                        import Schema__Link__Type
-from issues_fs.schemas.graph.Schema__Type__Index                       import Schema__Type__Index
-from issues_fs.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node
+from issues_fs.schemas.graph.Safe_Str__Graph_Types                                                      import Safe_Str__Node_Type, Safe_Str__Node_Label
+from issues_fs.schemas.graph.Schema__Global__Index                                                      import Schema__Global__Index
+from issues_fs.schemas.graph.Schema__Node                                                               import Schema__Node
+from issues_fs.schemas.graph.Schema__Node__Info                                                         import Schema__Node__Info
+from issues_fs.schemas.graph.Schema__Node__Type                                                         import Schema__Node__Type
+from issues_fs.schemas.graph.Schema__Link__Type                                                         import Schema__Link__Type
+from issues_fs.schemas.graph.Schema__Type__Index                                                        import Schema__Type__Index
+from issues_fs.issues.storage.Path__Handler__Graph_Node                                                 import Path__Handler__Graph_Node
 
 
 class Graph__Repository(Type_Safe):                                              # Memory-FS based graph repository
@@ -28,13 +36,15 @@ class Graph__Repository(Type_Safe):                                             
     path_handler : Path__Handler__Graph_Node                                     # Path generation
     storage_fs   : Storage_FS             = None                                 # Set from memory_fs
 
+    SKIP_LABELS  = {'config', 'data', 'issues', 'indexes', '.issues'}            # Phase 2: System folder names
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         if self.memory_fs:
             self.storage_fs = self.memory_fs.storage_fs
 
     # ═══════════════════════════════════════════════════════════════════════════════
-    # Node Operations - Phase 1: Dual File Support
+    # Node Operations - Phase 2: Save with Legacy Cleanup
     # ═══════════════════════════════════════════════════════════════════════════════
 
     @type_safe
@@ -42,18 +52,35 @@ class Graph__Repository(Type_Safe):                                             
         if not node.label:
             return False
 
-        path_issue = self.path_handler.path_for_issue_json(node_type = node.node_type,  # Always write to issue.json
-                                                           label     = node.label     )
+        path_issue = self.path_handler.path_for_issue_json(node_type = node.node_type,
+                                                           label     = node.label    )
         data       = node.json()
         content    = json_dumps(data, indent=2)
-        return self.storage_fs.file__save(path_issue, content.encode('utf-8'))
+        result     = self.storage_fs.file__save(path_issue, content.encode('utf-8'))
+
+        if result is True:                                                       # Phase 2 (B12): Delete legacy file
+            self.delete_legacy_node_json(node.node_type, node.label)
+
+        return result
 
     @type_safe
-    def node_load(self                              ,                            # Load node from issue.json or node.json
+    def delete_legacy_node_json(self                              ,              # Phase 2 (B12): Remove legacy node.json
+                                node_type : Safe_Str__Node_Type   ,
+                                label     : Safe_Str__Node_Label
+                           ) -> bool:
+        path_node = self.path_handler.path_for_node_json(node_type, label)
+
+        if self.storage_fs.file__exists(path_node) is True:
+            return self.storage_fs.file__delete(path_node)
+
+        return False
+
+    @type_safe
+    def node_load(self                              ,                            # Load node by type and label
                   node_type : Safe_Str__Node_Type   ,
                   label     : Safe_Str__Node_Label
              ) -> Schema__Node:
-        path = self.get_issue_file_path(node_type, label)                        # Get actual file path (issue.json or node.json)
+        path = self.get_issue_file_path(node_type, label)
         if path is None:
             return None
 
@@ -73,77 +100,168 @@ class Graph__Repository(Type_Safe):                                             
                     label     : Safe_Str__Node_Label
                ) -> bool:
         deleted_any  = False
-        path_issue   = self.path_handler.path_for_issue_json(node_type, label)   # Delete issue.json if exists
-        path_node    = self.path_handler.path_for_node_json(node_type, label)    # Delete node.json if exists
+        path_issue   = self.path_handler.path_for_issue_json(node_type, label)
+        path_node    = self.path_handler.path_for_node_json(node_type, label)
 
         if self.storage_fs.file__exists(path_issue):
             self.storage_fs.file__delete(path_issue)
             deleted_any = True
 
-        if self.storage_fs.file__exists(path_node):
+        if self.storage_fs.file__exists(path_node):                              # Also delete legacy node.json
             self.storage_fs.file__delete(path_node)
             deleted_any = True
 
         return deleted_any
 
     @type_safe
-    def node_exists(self                              ,                          # Check if node exists (either file)
+    def node_exists(self                              ,                          # Check if node exists
                     node_type : Safe_Str__Node_Type   ,
                     label     : Safe_Str__Node_Label
                ) -> bool:
         return self.get_issue_file_path(node_type, label) is not None
 
     # ═══════════════════════════════════════════════════════════════════════════════
-    # File Path Resolution - Phase 1: Prefer issue.json over node.json
+    # File Path Resolution - Phase 2: issue.json Only (B13)
     # ═══════════════════════════════════════════════════════════════════════════════
 
     @type_safe
-    def get_issue_file_path(self                              ,                  # Get actual issue file path
-                            node_type : Safe_Str__Node_Type   ,                  # Prefers issue.json, falls back to node.json
+    def get_issue_file_path(self                              ,                  # Get issue file path (issue.json only)
+                            node_type : Safe_Str__Node_Type   ,
                             label     : Safe_Str__Node_Label
                        ) -> str:
-        path_issue = self.path_handler.path_for_issue_json(node_type, label)     # Check issue.json first
-        if self.storage_fs.file__exists(path_issue):
+        path_issue = self.path_handler.path_for_issue_json(node_type, label)
+
+        if self.storage_fs.file__exists(path_issue) is True:
             return path_issue
 
-        path_node = self.path_handler.path_for_node_json(node_type, label)       # Fall back to node.json
-        if self.storage_fs.file__exists(path_node):
-            return path_node
+        return None                                                              # Phase 2 (B13): No node.json fallback
 
-        return None                                                              # Neither exists
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # Node Discovery - Phase 2 (B10): Recursive Search
+    # ═══════════════════════════════════════════════════════════════════════════════
+
+    @type_safe
+    def nodes_list_all(self                                    ,                 # Find all issues recursively
+                       root_path : Safe_Str__File__Path = None
+                  ) -> List[Schema__Node__Info]:
+        all_paths = self.storage_fs.files__paths()
+        nodes     = []
+
+        for path in all_paths:
+            if path.endswith('/issue.json') is False:                            # Only issue.json files
+                continue
+
+            if root_path is not None and str(root_path) != '':                   # Filter by root if specified
+                if self.is_path_under_root(Safe_Str__File__Path(path), root_path) is False:
+                    continue
+
+            folder_path = path.rsplit('/issue.json', 1)[0]                       # Extract folder path
+            label       = folder_path.rsplit('/', 1)[-1]                         # Extract label from path
+
+            if label in self.SKIP_LABELS:                                        # Skip system folders
+                continue
+
+            node_type = self.extract_node_type_from_file(Safe_Str__File__Path(path))
+
+            node_info = Schema__Node__Info(label     = Safe_Str__Node_Label(label)      ,
+                                           path      = Safe_Str__File__Path(folder_path),
+                                           node_type = Safe_Str__Node_Type(node_type)   )
+            nodes.append(node_info)
+
+        return nodes
+
+    @type_safe
+    def is_path_under_root(self                              ,                   # Check path containment
+                           file_path : Safe_Str__File__Path  ,
+                           root_path : Safe_Str__File__Path
+                      ) -> bool:
+        file_str = str(file_path)
+        root_str = str(root_path)
+
+        if root_str == '':                                                       # Empty root = match all
+            return True
+
+        if root_str.endswith('/'):                                               # Normalize root path
+            return file_str.startswith(root_str)
+
+        return file_str.startswith(f"{root_str}/")
+
+    @type_safe
+    def extract_node_type_from_file(self                              ,          # Get node_type from JSON file
+                                    file_path : Safe_Str__File__Path
+                               ) -> str:
+        try:
+            content = self.storage_fs.file__str(str(file_path))
+            if content:
+                data = json_loads(content)
+                return data.get('node_type', '')
+        except (ValueError, KeyError):                                           # JSON parse or key errors
+            pass
+        return ''
+
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # Node Loading - Phase 2 (B11): Path-Based Access
+    # ═══════════════════════════════════════════════════════════════════════════════
+
+    @type_safe
+    def node_load_by_path(self                              ,                    # Load by explicit folder path
+                          folder_path : Safe_Str__File__Path
+                     ) -> Schema__Node:
+        issue_file = f"{folder_path}/issue.json"
+
+        if self.storage_fs.file__exists(issue_file) is False:
+            return None
+
+        content = self.storage_fs.file__str(issue_file)
+        if not content:
+            return None
+
+        data = json_loads(content)
+        if data is None:
+            return None
+
+        return Schema__Node.from_json(data)
+
+    @type_safe
+    def node_find_path_by_label(self                              ,              # Find path for label
+                                label : Safe_Str__Node_Label
+                           ) -> Safe_Str__File__Path:
+        label_str = str(label)
+        all_paths = self.storage_fs.files__paths()
+
+        for path in all_paths:
+            if path.endswith(f'/{label_str}/issue.json'):
+                folder_path = path.rsplit('/issue.json', 1)[0]
+                return Safe_Str__File__Path(folder_path)
+
+        return None
+
+    @type_safe
+    def node_load_by_label(self                              ,                   # Load by label (recursive search)
+                           label : Safe_Str__Node_Label
+                      ) -> Schema__Node:
+        path = self.node_find_path_by_label(label)
+
+        if path is not None:
+            return self.node_load_by_path(path)
+
+        return None
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # Node Listing Operations
     # ═══════════════════════════════════════════════════════════════════════════════
 
     @type_safe
-    def nodes_list_labels(self                              ,                    # List all node labels for a type
-                          node_type : Safe_Str__Node_Type
+    def nodes_list_labels(self                                    ,              # List all node labels for type
+                          node_type : Safe_Str__Node_Type = None
                      ) -> List[Safe_Str__Node_Label]:
-        type_folder = self.path_handler.path_for_type_folder(node_type)
-        all_paths   = self.storage_fs.files__paths()
+        all_nodes = self.nodes_list_all()                                        # Phase 2: Use recursive discovery
 
-        labels = set()                                                           # Use set to avoid duplicates
-        prefix = f"{type_folder}/"
+        if node_type is not None:
+            type_str = str(node_type)
+            return [n.label for n in all_nodes if str(n.node_type) == type_str]
 
-        for path in all_paths:
-            if path.startswith(prefix) is False:
-                continue
-
-            relative = path[len(prefix):]                                        # Remove prefix
-            parts    = relative.split('/')
-
-            if len(parts) >= 2:
-                label    = parts[0]                                              # First part is label folder
-                filename = parts[1]                                              # Second part is filename
-
-                if filename in ('issue.json', 'node.json'):                      # Check for either file
-                    try:
-                        labels.add(Safe_Str__Node_Label(label))
-                    except Exception:
-                        pass                                                     # Skip invalid label formats
-
-        return list(labels)
+        return [n.label for n in all_nodes]
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # Type Index Operations

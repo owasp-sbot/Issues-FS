@@ -4,7 +4,7 @@
   "node_index": 2,
   "label": "Task-2",
   "title": "Path-based node loading (B11)",
-  "status": "todo",
+  "status": "done",
   "tags": ["phase-2", "refactoring", "B11"],
   "properties": {
     "brief_task_id": "B11",
@@ -15,6 +15,7 @@
     ],
     "depends_on": ["Task-1"],
     "has_provided_code": true,
-    "description": "Add node_load_by_path(), node_find_path_by_label(), node_load_by_label() to Graph__Repository. Add get_node_by_path() to Node__Service. Create Schema__Node__Response schema (success, node, message). Rewrite imports from mgraph_ai_ui_html_transformation_workbench to issues_fs."
+    "description": "Add node_load_by_path(), node_find_path_by_label(), node_load_by_label() to Graph__Repository. Add get_node_by_path() to Node__Service. Create Schema__Node__Response schema (success, node, message). Rewrite imports from mgraph_ai_ui_html_transformation_workbench to issues_fs.",
+    "dev_notes": "Created Schema__Node__Response.py with issues_fs imports (Type_Safe, Safe_Str__Text, Schema__Node). Added node_load_by_path(), node_find_path_by_label(), node_load_by_label() to Graph__Repository - all use issue.json only. Added get_node_by_path() to Node__Service returning Schema__Node__Response. Also added B17 methods: list_nodes_for_type() with root_path parameter, get_current_root_path(), and updated list_nodes() for root scoping. Renamed _traverse_graph, _resolve_link_target, _find_incoming_links to public methods. 12 Phase 2 B11 tests created and passing."
   }
 }

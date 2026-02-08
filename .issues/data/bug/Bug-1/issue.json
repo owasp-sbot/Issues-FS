@@ -1,0 +1,32 @@
+{
+  "node_id": "cb1d2e3f",
+  "node_type": "bug",
+  "node_index": 1,
+  "label": "Bug-1",
+  "title": "Dev agent replaced Safe_Str__File__Path with raw str in B13 refactoring — type safety regression",
+  "status": "confirmed",
+  "tags": ["type-safety", "regression", "P1", "phase-2", "B13", "review-needed"],
+  "properties": {
+    "priority": "P1",
+    "severity": "high",
+    "introduced_by": "Task-4 (B13)",
+    "found_by": "Human review + QA",
+    "description": "During the Phase 2 B13 refactoring (remove node.json fallback), the Dev agent changed the return type of Issue__Children__Service.scan_child_folders() from List[Safe_Str__File__Path] to List[str]. This is a type safety regression that violates the project's core convention: NEVER use raw Python types (str, dict, list, int) where Safe_* primitives exist. The Dev should have kept the Safe_Str__File__Path type or documented WHY a change was needed and raised a review issue.",
+    "files_affected": [
+      {
+        "file": "issues_fs/issues/phase_1/Issue__Children__Service.py",
+        "line": 217,
+        "change": "List[Safe_Str__File__Path] -> List[str]",
+        "severity": "CRITICAL regression"
+      }
+    ],
+    "broader_issue": "There is also widespread use of raw str, dict, list, int throughout the existing codebase (not introduced by the Dev agent — these are pre-existing). This needs a separate task to audit and convert to Safe_* primitives. But the Dev agent should NEVER introduce NEW raw type usage — only convert away from it.",
+    "required_action": [
+      "Revert List[str] back to List[Safe_Str__File__Path] in scan_child_folders()",
+      "Dev must document in writing WHY any type change is needed before making it",
+      "Dev must raise a 'review' issue type for any type signature changes so the human can comment",
+      "Add to Dev ROLE.md: NEVER downgrade Safe_* types to raw Python types without explicit review approval"
+    ],
+    "convention_violation": "The Issues-FS project uses osbot-utils Type_Safe as the foundation. ALL classes inherit from Type_Safe. Safe_* primitives (Safe_Str, Safe_Id, Safe_Str__File__Path, etc.) are used INSTEAD of raw Python types. This is not optional — it is the core architectural discipline. Changing Safe_Str__File__Path to str is like removing a type annotation in a strongly-typed language."
+  }
+}

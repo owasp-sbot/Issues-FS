@@ -1,10 +1,10 @@
 {
-  "total_issues": 13,
-  "last_updated": "2026-02-07",
+  "total_issues": 16,
+  "last_updated": "2026-02-08",
   "types": {
     "task": {
-      "count": 13,
-      "next_index": 14,
+      "count": 15,
+      "next_index": 16,
       "labels": [
         "Task-1",
         "Task-2",
@@ -18,22 +18,41 @@
         "Task-10",
         "Task-11",
         "Task-12",
-        "Task-13"
+        "Task-13",
+        "Task-14",
+        "Task-15"
+      ]
+    },
+    "bug": {
+      "count": 1,
+      "next_index": 2,
+      "labels": [
+        "Bug-1"
       ]
     }
   },
   "status_summary": {
-    "todo": 13,
+    "todo": 11,
     "in-progress": 0,
-    "done": 0
+    "done": 4,
+    "confirmed": 1
   },
   "tags": {
-    "phase-2": 13,
+    "phase-2": 14,
     "refactoring": 13,
+    "librarian": 2,
+    "documentation": 1,
+    "llm-briefs": 1,
+    "knowledge-request": 1,
+    "convention": 1,
+    "traceability": 1,
+    "type-safety": 1,
+    "regression": 1,
+    "review-needed": 1,
     "B10": 1,
     "B11": 1,
     "B12": 1,
-    "B13": 1,
+    "B13": 2,
     "B14": 1,
     "B15": 1,
     "B16": 1,
