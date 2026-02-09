@@ -4,7 +4,7 @@
   "node_index": 4,
   "label": "Task-4",
   "title": "Remove node.json read fallback and create migration script (B13)",
-  "status": "todo",
+  "status": "done",
   "tags": ["phase-2", "refactoring", "B13"],
   "properties": {
     "brief_task_id": "B13",
@@ -16,6 +16,7 @@
     ],
     "depends_on": ["Task-3"],
     "has_provided_code": true,
-    "description": "Remove node.json fallback from get_issue_file_path() in Graph__Repository. Remove node.json references from Root__Selection__Service (is_valid_root, scan_for_issue_folders, load_issue_summary, count_top_level_issues, count_children_in_folder). Remove node.json references from Issue__Children__Service (parent_exists, scan_child_folders, load_child_summary). Create migration script migrate_node_to_issue_json.py. CRITICAL: Migration must run BEFORE deploying these changes."
+    "description": "Remove node.json fallback from get_issue_file_path() in Graph__Repository. Remove node.json references from Root__Selection__Service (is_valid_root, scan_for_issue_folders, load_issue_summary, count_top_level_issues, count_children_in_folder). Remove node.json references from Issue__Children__Service (parent_exists, scan_child_folders, load_child_summary). Create migration script migrate_node_to_issue_json.py. CRITICAL: Migration must run BEFORE deploying these changes.",
+    "dev_notes": "Removed node.json fallback from Graph__Repository.get_issue_file_path() - returns None if no issue.json exists. Removed FILE_NAME__NODE_JSON import and all node.json references from Root__Selection__Service (is_valid_root, scan_for_issue_folders, count_top_level_issues, count_children_in_folder, load_issue_summary). Removed node.json references from Issue__Children__Service (parent_exists, scan_child_folders, load_child_summary) while preserving root-is-always-valid-parent logic. Created migration script at issues_fs/scripts/migrate_node_to_issue_json.py with Migration__Node_To_Issue_Json class (run() and dry_run() methods). Updated 3 Phase 1 tests for B13 compatibility. 25 Phase 2 B13 tests created and passing (4 Graph__Repository, 8 Root__Selection__Service, 6 Issue__Children__Service, 7 Migration script)."
   }
 }

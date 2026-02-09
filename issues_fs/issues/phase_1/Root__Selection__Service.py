@@ -1,6 +1,7 @@
 # ═══════════════════════════════════════════════════════════════════════════════
 # Root__Selection__Service - Service for managing which folder is the current root
 # Phase 1: Enables selecting any folder with issue.json/node.json as the root
+# Phase 2 (B13): Removed node.json fallback - issue.json only
 # ═══════════════════════════════════════════════════════════════════════════════
 
 from typing                                                                                             import List
@@ -11,7 +12,7 @@ from osbot_utils.type_safe.type_safe_core.decorators.type_safe                  
 from osbot_utils.utils.Json                                                                             import json_loads
 from issues_fs.schemas.issues.phase_1.Schema__Root                     import Schema__Root__Candidate, Schema__Root__List__Response, Schema__Root__Current__Response, Schema__Root__Select__Response, Schema__Root__Select__Request
 from issues_fs.issues.graph_services.Graph__Repository         import Graph__Repository
-from issues_fs.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node, FILE_NAME__ISSUE_JSON, FILE_NAME__NODE_JSON
+from issues_fs.issues.storage.Path__Handler__Graph_Node        import Path__Handler__Graph_Node, FILE_NAME__ISSUE_JSON
 
 
 class Root__Selection__Service(Type_Safe):                                       # Service for root folder selection
@@ -114,15 +115,9 @@ class Root__Selection__Service(Type_Safe):                                      
             if path.startswith(base_path) is False:
                 full_path = f"{base_path}/{path}"
 
-        issue_json = f"{full_path}/{FILE_NAME__ISSUE_JSON}"                      # Check for issue.json or node.json
-        node_json  = f"{full_path}/{FILE_NAME__NODE_JSON}"
+        issue_json = f"{full_path}/{FILE_NAME__ISSUE_JSON}"
 
-        if self.repository.storage_fs.file__exists(issue_json):
-            return True
-        if self.repository.storage_fs.file__exists(node_json):
-            return True
-
-        return False
+        return self.repository.storage_fs.file__exists(issue_json)               # Phase 2: issue.json only
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # Candidate Creation Helpers
@@ -196,7 +191,7 @@ class Root__Selection__Service(Type_Safe):                                      
     # Folder Scanning
     # ═══════════════════════════════════════════════════════════════════════════════
 
-    def scan_for_issue_folders(self) -> List[str]:                               # Find all folders with issue/node.json
+    def scan_for_issue_folders(self) -> List[str]:                               # Find all folders with issue.json
         folders     = set()
         all_paths   = self.repository.storage_fs.files__paths()
         base_path   = str(self.path_handler.base_path)
@@ -206,9 +201,9 @@ class Root__Selection__Service(Type_Safe):                                      
             if path.startswith(data_prefix) is False:
                 continue
 
-            if path.endswith(f'/{FILE_NAME__ISSUE_JSON}') or path.endswith(f'/{FILE_NAME__NODE_JSON}'):
-                folder = path.rsplit('/', 1)[0]                                  # Get parent folder
-                if folder != base_path and folder != '.':                        # Exclude root
+            if path.endswith(f'/{FILE_NAME__ISSUE_JSON}'):                       # Phase 2: issue.json only
+                folder = path.rsplit('/', 1)[0]
+                if folder != base_path and folder != '.':
                     folders.add(folder)
 
         return list(folders)
@@ -233,7 +228,7 @@ class Root__Selection__Service(Type_Safe):                                      
         for path in all_paths:
             if path.startswith(data_path) is False:
                 continue
-            if path.endswith(f'/{FILE_NAME__ISSUE_JSON}') or path.endswith(f'/{FILE_NAME__NODE_JSON}'):
+            if path.endswith(f'/{FILE_NAME__ISSUE_JSON}'):                       # Phase 2: issue.json only
                 folder = path.rsplit('/', 1)[0]
                 folders.add(folder)
 
@@ -247,7 +242,7 @@ class Root__Selection__Service(Type_Safe):                                      
         for path in all_paths:
             if path.startswith(issues_folder) is False:
                 continue
-            if path.endswith(f'/{FILE_NAME__ISSUE_JSON}') or path.endswith(f'/{FILE_NAME__NODE_JSON}'):
+            if path.endswith(f'/{FILE_NAME__ISSUE_JSON}'):                       # Phase 2: issue.json only
                 folder = path.rsplit('/', 1)[0]
                 folders.add(folder)
 
@@ -258,13 +253,8 @@ class Root__Selection__Service(Type_Safe):                                      
     # ═══════════════════════════════════════════════════════════════════════════════
 
     def load_issue_summary(self, folder_path: str) -> dict:                      # Load issue summary from folder
-        issue_path = f"{folder_path}/{FILE_NAME__ISSUE_JSON}"                    # Try issue.json first
-        data = self.load_issue_from_path(issue_path)
-        if data:
-            return data
-
-        node_path = f"{folder_path}/{FILE_NAME__NODE_JSON}"                      # Fall back to node.json
-        return self.load_issue_from_path(node_path)
+        issue_path = f"{folder_path}/{FILE_NAME__ISSUE_JSON}"
+        return self.load_issue_from_path(issue_path)                             # Phase 2: issue.json only
 
     def load_issue_from_path(self, file_path: str) -> dict:                      # Load issue data from specific path
         if self.repository.storage_fs.file__exists(file_path) is False:

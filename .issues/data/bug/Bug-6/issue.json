@@ -1,0 +1,31 @@
+{
+  "node_id": "b2c3d4e5",
+  "node_type": "bug",
+  "node_index": 6,
+  "label": "Bug-6",
+  "title": "parse_label_to_type false-positive: shorter type prefix matches labels belonging to longer unregistered types",
+  "status": "confirmed",
+  "tags": ["logic-error", "P2", "phase-2", "B22"],
+  "properties": {
+    "priority": "P2",
+    "severity": "major",
+    "introduced_by": "Task-13 (B22)",
+    "found_by": "QA review (P2)",
+    "description": "parse_label_to_type iterates known types longest-first and checks label_str.startswith(f'{prefix}-'). This produces a false positive when a shorter registered type is a prefix of a longer unregistered type. Example: if type 'user' is registered but 'user-story' is NOT, then label 'User-Story-5' matches against 'user' because 'User-Story-5'.startswith('User-') is True. The method returns Safe_Str__Node_Type('user') instead of the correct fallback behavior. The longest-first sort only prevents false positives when ALL relevant types are registered. The fix should verify that the character immediately after the prefix-dash is a digit, confirming the match is complete (not a partial prefix of a longer type word).",
+    "files_affected": [
+      {
+        "file": "issues_fs/issues/graph_services/Node__Service.py",
+        "line": 330,
+        "change": "if label_str.startswith(f'{prefix}-') should also verify the remainder starts with a digit",
+        "severity": "MAJOR"
+      }
+    ],
+    "required_action": [
+      "After matching the prefix, verify the next character after the dash is a digit (not another uppercase letter that would indicate a longer type)",
+      "Option A: Check remainder.lstrip(digits) is empty -- i.e. 'User-Story-5'[len('User-'):] = 'Story-5', first char 'S' is not a digit, so reject",
+      "Option B: Use regex match: re.match(f'^{re.escape(prefix)}-\\d+$', label_str)",
+      "Add test case: register type 'user' (but NOT 'user-story'), parse label 'User-Story-5', verify it falls through to fallback"
+    ],
+    "impact": "Silent wrong-type resolution in resolve_link_target. A link targeting 'User-Story-5' would be resolved as type 'user' instead of 'user-story', causing a lookup failure (node not found under wrong type directory) or worse, returning the wrong node if a 'User-Story-5' label coincidentally exists under the 'user' type."
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "node_id": "a2b3c4d5",
+  "node_type": "bug",
+  "node_index": 2,
+  "label": "Bug-2",
+  "title": "extract_node_type_from_file returns raw str instead of Safe_Str__Node_Type",
+  "status": "resolved",
+  "tags": ["type-safety", "regression", "P2", "phase-2", "B10", "review-needed"],
+  "properties": {
+    "priority": "P2",
+    "severity": "major",
+    "introduced_by": "Task-1 (B10)",
+    "found_by": "QA review",
+    "description": "The newly introduced method Graph__Repository.extract_node_type_from_file() at line 192 returns raw str instead of Safe_Str__Node_Type. Since Safe_Str__Node_Type is already imported and used throughout Graph__Repository.py, this method should return Safe_Str__Node_Type to maintain type safety at the method boundary. Currently the caller at line 168 wraps the return in Safe_Str__Node_Type(), but the method itself does not enforce type safety.",
+    "files_affected": [
+      {
+        "file": "issues_fs/issues/graph_services/Graph__Repository.py",
+        "line": 192,
+        "change": "return type is -> str, should be -> Safe_Str__Node_Type",
+        "severity": "MAJOR"
+      }
+    ],
+    "required_action": [
+      "Change return type from -> str to -> Safe_Str__Node_Type",
+      "Wrap return values in Safe_Str__Node_Type() within the method",
+      "Return Safe_Str__Node_Type('') instead of '' for empty/error cases"
+    ],
+    "convention_violation": "The Issues-FS project requires Safe_* primitives instead of raw Python types. Newly introduced methods must not use raw str as return types when a corresponding Safe_* type exists."
+  }
+}

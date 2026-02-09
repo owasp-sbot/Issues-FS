@@ -81,7 +81,7 @@ class test_Graph__Repository__Phase_1(TestCase):
         assert loaded               is not None
         assert str(loaded.title)    == 'New Title from issue.json'               # Should read issue.json
 
-    def test__node_load__falls_back_to_node_json(self):                          # Test fallback when no issue.json
+    def test__node_load__returns_none_for_node_json_only(self):                   # Phase 2 (B13): No node.json fallback
         node_type = Safe_Str__Node_Type('bug')
         label     = Safe_Str__Node_Label('Bug-2')
 
@@ -93,8 +93,7 @@ class test_Graph__Repository__Phase_1(TestCase):
 
         loaded = self.repository.node_load(node_type, label)
 
-        assert loaded               is not None
-        assert str(loaded.title)    == 'Legacy node.json'                        # Should fall back to node.json
+        assert loaded is None                                                    # Phase 2 (B13): No node.json fallback
 
     def test__node_load__returns_none_when_neither_exists(self):                 # Test returns None when no file
         node_type = Safe_Str__Node_Type('bug')
@@ -123,7 +122,7 @@ class test_Graph__Repository__Phase_1(TestCase):
         assert self.repository.storage_fs.file__exists(path_issue) is True       # issue.json should exist
         assert self.repository.storage_fs.file__exists(path_node)  is False      # node.json should NOT be created
 
-    def test__node_save__preserves_existing_node_json(self):                     # Test node.json not deleted on save
+    def test__node_save__deletes_existing_node_json(self):                       # Phase 2 (B12): node.json deleted on save
         node_type = Safe_Str__Node_Type('bug')
         label     = Safe_Str__Node_Label('Bug-3')
 
@@ -138,7 +137,7 @@ class test_Graph__Repository__Phase_1(TestCase):
         path_issue = self.path_handler.path_for_issue_json(node_type, label)
 
         assert self.repository.storage_fs.file__exists(path_issue) is True       # issue.json created
-        assert self.repository.storage_fs.file__exists(path_node)  is True       # node.json preserved (Phase 1)
+        assert self.repository.storage_fs.file__exists(path_node)  is False      # Phase 2 (B12): node.json deleted
 
     def test__node_save__round_trip(self):                                       # Test save then load returns same data
         original = self.create_test_node(node_type = 'feature'       ,
@@ -168,14 +167,14 @@ class test_Graph__Repository__Phase_1(TestCase):
 
         assert self.repository.node_exists(node_type, label) is True
 
-    def test__node_exists__true_for_node_json(self):                             # Test exists with node.json only
+    def test__node_exists__false_for_node_json_only(self):                       # Phase 2 (B13): No node.json fallback
         node_type = Safe_Str__Node_Type('bug')
         label     = Safe_Str__Node_Label('Bug-11')
 
         path_node = self.path_handler.path_for_node_json(node_type, label)
         self.write_raw_json_to_path(path_node, {'title': 'Test'})
 
-        assert self.repository.node_exists(node_type, label) is True
+        assert self.repository.node_exists(node_type, label) is False            # Phase 2 (B13): No node.json fallback
 
     def test__node_exists__false_when_neither(self):                             # Test not exists when no file
         node_type = Safe_Str__Node_Type('bug')
@@ -231,8 +230,8 @@ class test_Graph__Repository__Phase_1(TestCase):
 
         path1 = self.path_handler.path_for_issue_json(node_type, Safe_Str__Node_Label('Task-1'))
         path2 = self.path_handler.path_for_issue_json(node_type, Safe_Str__Node_Label('Task-2'))
-        self.write_raw_json_to_path(path1, {'title': 'Task 1'})
-        self.write_raw_json_to_path(path2, {'title': 'Task 2'})
+        self.write_raw_json_to_path(path1, {'title': 'Task 1', 'node_type': 'task'})
+        self.write_raw_json_to_path(path2, {'title': 'Task 2', 'node_type': 'task'})
 
         labels = self.repository.nodes_list_labels(node_type)
 
@@ -240,7 +239,7 @@ class test_Graph__Repository__Phase_1(TestCase):
         assert 'Task-1' in label_strs
         assert 'Task-2' in label_strs
 
-    def test__nodes_list_labels__finds_node_json(self):                          # Test list finds node.json files
+    def test__nodes_list_labels__ignores_node_json(self):                        # Phase 2 (B10/B13): node.json not discovered
         node_type = Safe_Str__Node_Type('bug')
 
         path1 = self.path_handler.path_for_node_json(node_type, Safe_Str__Node_Label('Bug-1'))
@@ -248,8 +247,7 @@ class test_Graph__Repository__Phase_1(TestCase):
 
         labels = self.repository.nodes_list_labels(node_type)
 
-        label_strs = [str(l) for l in labels]
-        assert 'Bug-1' in label_strs
+        assert len(labels) == 0                                                  # Phase 2: node.json not discovered
 
     def test__nodes_list_labels__no_duplicates(self):                            # Test list doesn't duplicate when both exist
         node_type = Safe_Str__Node_Type('feature')
@@ -257,13 +255,13 @@ class test_Graph__Repository__Phase_1(TestCase):
 
         path_issue = self.path_handler.path_for_issue_json(node_type, label)     # Create both files for same node
         path_node  = self.path_handler.path_for_node_json(node_type, label)
-        self.write_raw_json_to_path(path_issue, {'title': 'Issue'})
+        self.write_raw_json_to_path(path_issue, {'title': 'Issue', 'node_type': 'feature'})
         self.write_raw_json_to_path(path_node,  {'title': 'Node'})
 
         labels = self.repository.nodes_list_labels(node_type)
 
         label_strs = [str(l) for l in labels]
-        assert label_strs.count('Feature-1') == 1                                # Should appear only once
+        assert label_strs.count('Feature-1') == 1                                # Should appear only once (via issue.json)
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # get_issue_file_path Tests
@@ -280,7 +278,7 @@ class test_Graph__Repository__Phase_1(TestCase):
 
         assert result == path_issue
 
-    def test__get_issue_file_path__returns_node_json_as_fallback(self):          # Test returns node.json as fallback
+    def test__get_issue_file_path__returns_none_for_node_json_only(self):        # Phase 2 (B13): No node.json fallback
         node_type = Safe_Str__Node_Type('bug')
         label     = Safe_Str__Node_Label('Bug-31')
 
@@ -289,7 +287,7 @@ class test_Graph__Repository__Phase_1(TestCase):
 
         result = self.repository.get_issue_file_path(node_type, label)
 
-        assert result == path_node
+        assert result is None                                                    # Phase 2 (B13): No node.json fallback
 
     def test__get_issue_file_path__prefers_issue_json(self):                     # Test prefers issue.json over node.json
         node_type = Safe_Str__Node_Type('bug')

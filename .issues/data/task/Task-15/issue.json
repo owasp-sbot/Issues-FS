@@ -1,0 +1,26 @@
+{
+  "node_id": "a1b2c3e1",
+  "node_type": "task",
+  "node_index": 15,
+  "label": "Task-15",
+  "title": "Define and document code comment traceability convention (Issue-Id + Label in comments)",
+  "status": "todo",
+  "tags": ["librarian", "convention", "traceability", "documentation"],
+  "properties": {
+    "assigned_to": "Librarian",
+    "description": "When developers add code comments referencing work done (e.g. '# Phase 2 Changes: B10: nodes_list_all() for recursive discovery'), these comments should include the Issues-FS Issue-Id and Label (e.g. Task-1) so that the graph can connect code changes to the issues that drove them. Currently the Dev agent wrote comments like '# B10: nodes_list_all()...' but did NOT include 'Task-1' or the node_id. This breaks the traceability chain from code -> issue -> brief -> decision.",
+    "deliverables": [
+      "Document the exact format for code comments that reference issues (e.g. '# [Task-1/B10] nodes_list_all() for recursive discovery')",
+      "Define whether to use label (Task-1), node_id (a1b2c3d0), or both",
+      "Define format for multi-issue references (when one code change addresses multiple tasks)",
+      "Create a convention document at modules/Issues-FS__Docs/docs/development/convention__code-comment-traceability.md",
+      "Include examples of good and bad comments",
+      "Define how these comments should be parseable (so a future tool can extract issue references from code)",
+      "Update the Dev ROLE.md 'Coding Standards' section to include this convention",
+      "Consider: should this also apply to commit messages? (e.g. 'feat(Task-1/B10): add recursive node discovery')"
+    ],
+    "example_current": "# B10: nodes_list_all() for recursive discovery in issues/ folders",
+    "example_proposed": "# [Task-1][B10] nodes_list_all() for recursive discovery in issues/ folders",
+    "notes": "This is a graph connectivity issue at its core. Code comments are nodes. Issues are nodes. Without explicit references, we lose the edge between them. The Librarian should think about this as a cataloguing problem: how do we ensure every code change is catalogued back to the issue that requested it?"
+  }
+}
