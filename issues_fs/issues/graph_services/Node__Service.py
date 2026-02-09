@@ -284,15 +284,39 @@ class Node__Service(Type_Safe):                                                 
                                               label   = label )
 
     # ═══════════════════════════════════════════════════════════════════════════════
-    # Helper Methods
+    # Label Generation - Phase 2 (B22): Hyphenated Labels
     # ═══════════════════════════════════════════════════════════════════════════════
 
-    def label_from_type_and_index(self                              ,            # Generate label
+    @type_safe
+    def label_from_type_and_index(self                              ,            # Generate hyphenated label
                                   node_type  : Safe_Str__Node_Type  ,
                                   node_index : int
                              ) -> Safe_Str__Node_Label:
-        display_type = str(node_type).capitalize()
-        return Safe_Str__Node_Label(f"{display_type}-{node_index}")
+        display_type = self.type_to_label_prefix(node_type)
+        return f"{display_type}-{node_index}"
+
+    def type_to_label_prefix(self, node_type: str) -> str:                       # Phase 2 (B22): Convert type to prefix
+        return '-'.join(word.capitalize() for word in node_type.split('-'))
+
+    @type_safe
+    def parse_label_to_type(self                              ,                  # Phase 2 (B22): Extract type from label
+                            label : Safe_Str__Node_Label
+                       ) -> Safe_Str__Node_Type:
+        label_str   = str(label)
+        known_types = [str(nt.name) for nt in self.repository.node_types_load()]
+
+        for node_type in sorted(known_types, key=len, reverse=True):             # Longest first so 'user-story' matches before 'user'
+            prefix = self.type_to_label_prefix(node_type)
+
+            if label_str.startswith(f"{prefix}-"):
+                return node_type
+
+        # Fallback: assume single-word type (first segment before hyphen)
+        if '-' in label_str:
+            type_part = label_str.split('-', 1)[0].lower()
+            return type_part
+
+        return None
 
     def update_global_index(self) -> None:                                       # Recalculate global index
         node_types   = self.repository.node_types_load()
@@ -320,7 +344,7 @@ class Node__Service(Type_Safe):                                                 
                        node_type : Safe_Str__Node_Type   ,
                        label     : Safe_Str__Node_Label  ,
                        depth     : int = 1
-                  ) -> 'Schema__Graph__Response':
+                  ) -> Schema__Graph__Response:
 
         if depth > 3:                                                            # Cap depth to prevent expensive traversals
             depth = 3
@@ -389,23 +413,21 @@ class Node__Service(Type_Safe):                                                 
                                                  link_type = link_type         ))
                 self.traverse_graph(source_node, depth - 1, visited, nodes, links)
 
-    def resolve_link_target(self                           ,                     # Load target node from link
+    def resolve_link_target(self                           ,                     # Phase 2 (B22): Load target from link
                             link : Schema__Node__Link
                        ) -> Schema__Node:
         if not link.target_label:
             return None
 
-        target_label = str(link.target_label)
-        parts        = target_label.split('-')                                   # Parse "Bug-1" -> type="bug", label="Bug-1"
+        target_label = link.target_label
+        target_type  = self.parse_label_to_type(target_label)                    # Phase 2: Use new parser
 
-        if len(parts) != 2:
+        if target_type is None:
             return None
 
-        target_type = parts[0].lower()                                           # "Bug" -> "bug"
-
         try:
-            return self.repository.node_load(node_type = Safe_Str__Node_Type(target_type)  ,
-                                             label     = Safe_Str__Node_Label(target_label))
+            return self.repository.node_load(node_type = target_type  ,
+                                             label     = target_label )
         except Exception:
             return None
 

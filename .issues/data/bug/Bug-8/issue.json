@@ -1,0 +1,64 @@
+{
+  "node_id": "d4e5f6a7",
+  "node_type": "bug",
+  "node_index": 8,
+  "label": "Bug-8",
+  "title": "B18 MGraph implementation does not leverage Type_Safe correctly -- needs rework",
+  "status": "confirmed",
+  "tags": ["type-safety", "P1", "phase-2", "B18", "review-needed", "mgraph"],
+  "properties": {
+    "priority": "P1",
+    "severity": "critical",
+    "introduced_by": "Task-9 (B18) -- Dev P3 agent",
+    "found_by": "Human review",
+    "description": "The entire B18 MGraph implementation (Schema__MGraph__Issues.py, MGraph__Issues__Domain.py) fails to leverage Type_Safe's capabilities correctly. Multiple anti-patterns found during review.",
+    "issues_found": [
+      {
+        "issue": "Redundant __init__ in Schema__MGraph__Issues__Data",
+        "detail": "Has a manual __init__ that checks for None and assigns empty dicts. Type_Safe handles this automatically -- the entire __init__ can be deleted. This is the exact anti-pattern shown in the Type_Safe collections guide.",
+        "file": "issues_fs/mgraph/Schema__MGraph__Issues.py",
+        "lines": "38-43"
+      },
+      {
+        "issue": "Raw str keys in Dict types instead of Node_Id/Edge_Id",
+        "detail": "Schema__MGraph__Issues__Data uses Dict[str, Schema__MGraph__Issue__Node] -- should be Dict[Node_Id, Schema__MGraph__Issue__Node]. Same for edges with Edge_Id. Domain indexes use Dict[str, str] and Dict[str, List[str]] -- should use Safe_Str__Node_Label, Node_Id, etc.",
+        "file": "issues_fs/mgraph/Schema__MGraph__Issues.py and MGraph__Issues__Domain.py",
+        "lines": "35-36, 20-22"
+      },
+      {
+        "issue": "Should use Type_Safe collection subclasses",
+        "detail": "Per the Type_Safe collections subclassing guide (v3.63.3), reused Dict/List types should be defined as named subclasses (e.g. Dict__Nodes__By_Id, Dict__Edges__By_Id) with expected_key_type and expected_value_type. This provides runtime type enforcement, semantic naming, and auto-initialization.",
+        "file": "issues_fs/mgraph/MGraph__Issues__Domain.py",
+        "lines": "20-22"
+      },
+      {
+        "issue": "Three schema classes in one file",
+        "detail": "Schema__MGraph__Issue__Node, Schema__MGraph__Issue__Edge, and Schema__MGraph__Issues__Data are all in one file. Project convention requires one class per file.",
+        "file": "issues_fs/mgraph/Schema__MGraph__Issues.py"
+      },
+      {
+        "issue": "Debug and hack files created",
+        "detail": "Dev agent created tests/mgraph/_debug_node_id.py (debug scratch file) and tests/conftest.py (sys.path hack). Both deleted during review.",
+        "file": "tests/mgraph/_debug_node_id.py, tests/conftest.py"
+      },
+      {
+        "issue": "Failing test",
+        "detail": "test_MGraph__Issues__Domain::test__add_node__multiple_nodes fails because nodes dict uses empty string as key (second add overwrites first). Root cause is the Dict[str, ...] type -- Node_Id keys would be unique.",
+        "file": "tests/mgraph/test_MGraph__Issues__Domain.py",
+        "lines": "103"
+      }
+    ],
+    "required_reading": [
+      "modules/Issues-FS__Docs/docs/development/llm-briefs/type-safety/v3.63.3__for_llms__type_safe__collections__subclassing_guide.md",
+      "modules/Issues-FS__Docs/docs/library/mgraph-db/v1_10_6__mGraph-db__llm_briefing.md"
+    ],
+    "required_action": [
+      "Split Schema__MGraph__Issues.py into 3 separate files (one class per file)",
+      "Remove redundant __init__ from Schema__MGraph__Issues__Data -- let Type_Safe handle it",
+      "Change Dict keys from str to Node_Id/Edge_Id/Safe_Str__Node_Label",
+      "Create Type_Safe collection subclasses for the indexes (Dict__Nodes__By_Id, etc.)",
+      "Fix the failing test (will be fixed by using Node_Id keys)",
+      "Review should be done by human before Dev continues with B18 rework"
+    ]
+  }
+}

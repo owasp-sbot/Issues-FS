@@ -12,9 +12,11 @@ from osbot_utils.type_safe.primitives.domains.identifiers.Obj_Id                
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                                          import type_safe
 from issues_fs.schemas.graph.Safe_Str__Graph_Types                                                      import Safe_Str__Node_Type, Safe_Str__Status, Safe_Str__Node_Type_Display, Safe_Str__Link_Verb
 from issues_fs.schemas.graph.Schema__Node__Type                                                         import Schema__Node__Type
-from issues_fs.schemas.graph.Schema__Node__Type__Update                                                 import Schema__Node__Type__Update, Schema__Node__Type__Update__Response
+from issues_fs.schemas.graph.Schema__Node__Type__Update                                                 import Schema__Node__Type__Update
+from issues_fs.schemas.graph.Schema__Node__Type__Update__Response                                       import Schema__Node__Type__Update__Response
 from issues_fs.schemas.graph.Schema__Link__Type                                                         import Schema__Link__Type
-from issues_fs.schemas.graph.Schema__Link__Type__Update                                                 import Schema__Link__Type__Update, Schema__Link__Type__Update__Response
+from issues_fs.schemas.graph.Schema__Link__Type__Update                                                 import Schema__Link__Type__Update
+from issues_fs.schemas.graph.Schema__Link__Type__Update__Response                                       import Schema__Link__Type__Update__Response
 from issues_fs.schemas.safe_str.Safe_Str__Hex_Color                                                     import Safe_Str__Hex_Color
 from issues_fs.issues.graph_services.Graph__Repository                                                  import Graph__Repository
 

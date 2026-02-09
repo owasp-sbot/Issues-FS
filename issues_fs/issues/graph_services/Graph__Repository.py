@@ -152,7 +152,7 @@ class Graph__Repository(Type_Safe):                                             
                 continue
 
             if root_path is not None and str(root_path) != '':                   # Filter by root if specified
-                if self.is_path_under_root(Safe_Str__File__Path(path), root_path) is False:
+                if self.is_path_under_root(path, root_path) is False:
                     continue
 
             folder_path = path.rsplit('/issue.json', 1)[0]                       # Extract folder path
@@ -161,11 +161,11 @@ class Graph__Repository(Type_Safe):                                             
             if label in self.SKIP_LABELS:                                        # Skip system folders
                 continue
 
-            node_type = self.extract_node_type_from_file(Safe_Str__File__Path(path))
+            node_type = self.extract_node_type_from_file(path)
 
-            node_info = Schema__Node__Info(label     = Safe_Str__Node_Label(label)      ,
-                                           path      = Safe_Str__File__Path(folder_path),
-                                           node_type = Safe_Str__Node_Type(node_type)   )
+            node_info = Schema__Node__Info(label     = label      ,
+                                           path      = folder_path,
+                                           node_type = node_type  )
             nodes.append(node_info)
 
         return nodes
