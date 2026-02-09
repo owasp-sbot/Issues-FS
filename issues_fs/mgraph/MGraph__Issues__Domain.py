@@ -10,7 +10,9 @@ from osbot_utils.type_safe.Type_Safe                                            
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                                      import type_safe
 from osbot_utils.type_safe.primitives.domains.identifiers.Node_Id                                   import Node_Id
 from osbot_utils.type_safe.primitives.domains.identifiers.Edge_Id                                   import Edge_Id
-from issues_fs.mgraph.Schema__MGraph__Issues                                                        import Schema__MGraph__Issue__Node, Schema__MGraph__Issue__Edge, Schema__MGraph__Issues__Data
+from issues_fs.mgraph.Schema__MGraph__Issue__Node                                                   import Schema__MGraph__Issue__Node
+from issues_fs.mgraph.Schema__MGraph__Issue__Edge                                                   import Schema__MGraph__Issue__Edge
+from issues_fs.mgraph.Schema__MGraph__Issues__Data                                                  import Schema__MGraph__Issues__Data
 from issues_fs.schemas.graph.Safe_Str__Graph_Types                                                  import Safe_Str__Node_Label
 
 

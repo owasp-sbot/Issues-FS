@@ -7,13 +7,16 @@
 
 from unittest                                                                                       import TestCase
 from osbot_utils.type_safe.Type_Safe                                                                import Type_Safe
+from osbot_utils.type_safe.type_safe_core.collections.Type_Safe__Dict                               import Type_Safe__Dict
 from osbot_utils.type_safe.primitives.domains.identifiers.Node_Id                                   import Node_Id
 from osbot_utils.type_safe.primitives.domains.identifiers.Edge_Id                                   import Edge_Id
 from osbot_utils.type_safe.primitives.domains.identifiers.Obj_Id                                    import Obj_Id
 from osbot_utils.type_safe.primitives.domains.common.safe_str.Safe_Str__Text                        import Safe_Str__Text
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path                   import Safe_Str__File__Path
 from issues_fs.schemas.graph.Safe_Str__Graph_Types                                                  import Safe_Str__Node_Type, Safe_Str__Node_Label, Safe_Str__Status
-from issues_fs.mgraph.Schema__MGraph__Issues                                                        import Schema__MGraph__Issue__Node, Schema__MGraph__Issue__Edge, Schema__MGraph__Issues__Data
+from issues_fs.mgraph.Schema__MGraph__Issue__Node                                                   import Schema__MGraph__Issue__Node
+from issues_fs.mgraph.Schema__MGraph__Issue__Edge                                                   import Schema__MGraph__Issue__Edge
+from issues_fs.mgraph.Schema__MGraph__Issues__Data                                                  import Schema__MGraph__Issues__Data
 from issues_fs.mgraph.MGraph__Issues__Domain                                                        import MGraph__Issues__Domain
 
 
@@ -34,7 +37,7 @@ class test_MGraph__Issues__Domain(TestCase):
                   file_path = 'data/bug/Bug-1',
                   node_id   = None            ):
         if node_id is None:
-            node_id = Node_Id()
+            node_id = Node_Id(Obj_Id())                                            # Generate unique ID via Obj_Id
         return Schema__MGraph__Issue__Node(node_id   = node_id                                  ,
                                             label     = Safe_Str__Node_Label(label)              ,
                                             title     = Safe_Str__Text(title)                    ,
@@ -46,9 +49,9 @@ class test_MGraph__Issues__Domain(TestCase):
                   source_id = None            ,
                   target_id = None            ,
                   edge_type = 'contains'      ):
-        return Schema__MGraph__Issue__Edge(edge_id   = Edge_Id()                            ,
-                                            source_id = source_id or Node_Id()               ,
-                                            target_id = target_id or Node_Id()               ,
+        return Schema__MGraph__Issue__Edge(edge_id   = Edge_Id(Obj_Id())                     , # Generate unique ID via Obj_Id
+                                            source_id = source_id or Node_Id(Obj_Id())        , # Generate unique ID via Obj_Id
+                                            target_id = target_id or Node_Id(Obj_Id())        , # Generate unique ID via Obj_Id
                                             edge_type = Safe_Str__Text(edge_type)            )
 
     # ═══════════════════════════════════════════════════════════════════════════════
@@ -59,9 +62,9 @@ class test_MGraph__Issues__Domain(TestCase):
         with MGraph__Issues__Domain() as _:
             assert type(_)                is MGraph__Issues__Domain
             assert type(_.data)           is Schema__MGraph__Issues__Data
-            assert type(_.index_by_label) is dict
-            assert type(_.index_by_path)  is dict
-            assert type(_.index_by_parent) is dict
+            assert type(_.index_by_label) is Type_Safe__Dict                       # Type_Safe converts Dict[str, str] to Type_Safe__Dict
+            assert type(_.index_by_path)  is Type_Safe__Dict                       # Type_Safe converts Dict[str, str] to Type_Safe__Dict
+            assert type(_.index_by_parent) is Type_Safe__Dict                      # Type_Safe converts Dict[str, List[str]] to Type_Safe__Dict
             assert len(_.data.nodes)      == 0
             assert len(_.data.edges)      == 0
 
@@ -194,8 +197,8 @@ class test_MGraph__Issues__Domain(TestCase):
         assert len(self.domain.index_by_parent) == 0
 
     def test__add_edge__no_duplicate_children(self):                             # Test duplicate child prevention
-        parent_id = Node_Id()
-        child_id  = Node_Id()
+        parent_id = Node_Id(Obj_Id())                                              # Generate unique IDs via Obj_Id
+        child_id  = Node_Id(Obj_Id())
 
         edge1 = self.make_edge(source_id=parent_id, target_id=child_id, edge_type='contains')
         edge2 = self.make_edge(source_id=parent_id, target_id=child_id, edge_type='contains')
