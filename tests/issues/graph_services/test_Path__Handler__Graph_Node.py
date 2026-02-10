@@ -38,25 +38,25 @@ class test_Path__Handler__Graph_Node(TestCase):
         path = self.path_handler.path_for_node(node_type = Safe_Str__Node_Type('bug')    ,
                                                label     = Safe_Str__Node_Label('Bug-27'))
 
-        assert path == '.issues/data/bug/Bug-27/node.json'
+        assert path == 'data/bug/Bug-27/node.json'
 
     def test__path_for_node__task(self):                                         # Test task node path
         path = self.path_handler.path_for_node(node_type = Safe_Str__Node_Type('task')   ,
                                                label     = Safe_Str__Node_Label('Task-1'))
 
-        assert path == '.issues/data/task/Task-1/node.json'
+        assert path == 'data/task/Task-1/node.json'
 
     def test__path_for_node__feature(self):                                      # Test feature node path
         path = self.path_handler.path_for_node(node_type = Safe_Str__Node_Type('feature'),
                                                label     = Safe_Str__Node_Label('Feature-99'))
 
-        assert path == '.issues/data/feature/Feature-99/node.json'
+        assert path == 'data/feature/Feature-99/node.json'
 
     def test__path_for_node_folder(self):                                        # Test node folder path
         path = self.path_handler.path_for_node_folder(node_type = Safe_Str__Node_Type('bug')    ,
                                                       label     = Safe_Str__Node_Label('Bug-27'))
 
-        assert path == '.issues/data/bug/Bug-27'
+        assert path == 'data/bug/Bug-27'
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # Attachment Path Tests
@@ -67,20 +67,20 @@ class test_Path__Handler__Graph_Node(TestCase):
                                                      label     = Safe_Str__Node_Label('Bug-27'),
                                                      filename  = 'screenshot.png'              )
 
-        assert path == '.issues/data/bug/Bug-27/attachments/screenshot.png'
+        assert path == 'data/bug/Bug-27/attachments/screenshot.png'
 
     def test__path_for_attachment__multiple_extensions(self):                    # Test attachment with complex filename
         path = self.path_handler.path_for_attachment(node_type = Safe_Str__Node_Type('task')   ,
                                                      label     = Safe_Str__Node_Label('Task-5'),
                                                      filename  = 'error.log.txt'               )
 
-        assert path == '.issues/data/task/Task-5/attachments/error.log.txt'
+        assert path == 'data/task/Task-5/attachments/error.log.txt'
 
     def test__path_for_attachments_folder(self):                                 # Test attachments folder path
         path = self.path_handler.path_for_attachments_folder(node_type = Safe_Str__Node_Type('bug')    ,
                                                              label     = Safe_Str__Node_Label('Bug-27'))
 
-        assert path == '.issues/data/bug/Bug-27/attachments'
+        assert path == 'data/bug/Bug-27/attachments'
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # Index Path Tests
@@ -89,22 +89,22 @@ class test_Path__Handler__Graph_Node(TestCase):
     def test__path_for_type_index(self):                                         # Test per-type index path
         path = self.path_handler.path_for_type_index(node_type = Safe_Str__Node_Type('bug'))
 
-        assert path == '.issues/data/bug/_index.json'
+        assert path == 'data/bug/_index.json'
 
     def test__path_for_type_index__task(self):                                   # Test task type index path
         path = self.path_handler.path_for_type_index(node_type = Safe_Str__Node_Type('task'))
 
-        assert path == '.issues/data/task/_index.json'
+        assert path == 'data/task/_index.json'
 
     def test__path_for_global_index(self):                                       # Test global index path
         path = self.path_handler.path_for_global_index()
 
-        assert path == '.issues/_index.json'
+        assert path == '_index.json'
 
     def test__path_for_type_folder(self):                                        # Test type folder path
         path = self.path_handler.path_for_type_folder(node_type = Safe_Str__Node_Type('feature'))
 
-        assert path == '.issues/data/feature'
+        assert path == 'data/feature'
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # Config Path Tests
@@ -113,22 +113,22 @@ class test_Path__Handler__Graph_Node(TestCase):
     def test__path_for_node_types(self):                                         # Test node-types.json path
         path = self.path_handler.path_for_node_types()
 
-        assert path == '.issues/config/node-types.json'
+        assert path == 'config/node-types.json'
 
     def test__path_for_link_types(self):                                         # Test link-types.json path
         path = self.path_handler.path_for_link_types()
 
-        assert path == '.issues/config/link-types.json'
+        assert path == 'config/link-types.json'
 
     def test__path_for_settings(self):                                           # Test settings.json path
         path = self.path_handler.path_for_settings()
 
-        assert path == '.issues/config/settings.json'
+        assert path == 'config/settings.json'
 
     def test__path_for_config_folder(self):                                      # Test config folder path
         path = self.path_handler.path_for_config_folder()
 
-        assert path == '.issues/config'
+        assert path == 'config'
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # Label Generation Tests
@@ -167,16 +167,16 @@ class test_Path__Handler__Graph_Node(TestCase):
             path = handler.path_for_node(node_type = Safe_Str__Node_Type('bug')    ,
                                          label     = Safe_Str__Node_Label('Bug-1') )
 
-            assert path == '/repo/.tracking/data/bug/Bug-1/node.json'
+            assert path == 'data/bug/Bug-1/node.json'
 
     def test__custom_base_path__global_index(self):                              # Test global index with custom base
         with Path__Handler__Graph_Node(base_path='/data/issues') as handler:
             path = handler.path_for_global_index()
 
-            assert path == '/data/issues/_index.json'
+            assert path == '_index.json'
 
     def test__custom_base_path__config(self):                                    # Test config with custom base
         with Path__Handler__Graph_Node(base_path='project/.issues') as handler:
             path = handler.path_for_node_types()
 
-            assert path == 'project/.issues/config/node-types.json'
+            assert path == 'config/node-types.json'

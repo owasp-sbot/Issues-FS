@@ -217,7 +217,7 @@ class test_Root__Selection__Service(TestCase):
     # ═══════════════════════════════════════════════════════════════════════════════
 
     def test__root_with_issue_json__uses_metadata(self):                         # Test root issue.json is read
-        root_path = '.issues/issue.json'
+        root_path = 'issue.json'
         self.create_issue_at_path(root_path                  ,
                                   label     = 'Gitrepo-1'    ,
                                   title     = 'My Project'   ,

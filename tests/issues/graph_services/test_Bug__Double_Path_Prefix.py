@@ -1,14 +1,16 @@
 # ═══════════════════════════════════════════════════════════════════════════════
-# test_Bug__Double_Path_Prefix - Tests documenting the double .issues path bug
+# test_Bug__Double_Path_Prefix - Regression tests for the double .issues path bug
 #
-# BUG: When Graph__Repository__Factory.create_local_disk() is called with
-#      root_path pointing to an .issues/ directory (as CLI__Context does),
-#      the Path__Handler__Graph_Node still uses its default base_path='.issues'.
-#      This causes all file operations to look in .issues/.issues/... instead
-#      of .issues/...
+# BUG (FIXED): When Graph__Repository__Factory.create_local_disk() was called with
+#      root_path pointing to an .issues/ directory, the Path__Handler__Graph_Node
+#      used its default base_path='.issues', causing all file operations to look
+#      in .issues/.issues/... instead of .issues/...
 #
-# These tests PASS because they document the CURRENT (broken) behaviour.
-# When the bug is fixed, these tests should be updated to reflect correct paths.
+# FIX: All path handler methods now return relative paths (e.g., 'data/bug/Bug-1/issue.json')
+#      without prepending base_path, since the storage backend already handles the root path.
+#
+# These tests verify the FIXED behaviour. They were originally bug tests that
+# documented the broken behaviour, now converted to regression tests.
 # ═══════════════════════════════════════════════════════════════════════════════
 
 import json
@@ -30,13 +32,16 @@ from issues_fs.schemas.graph.Schema__Node                                       
 
 
 class test__bug__Double_Path_Prefix(TestCase):
-    """Tests that document the double .issues path prefix bug.
+    """Regression tests for the double .issues path prefix bug.
 
-    The bug: CLI discovers /repo/.issues/ and passes it as root_path to
-    Graph__Repository__Factory.create_local_disk(). The factory creates
+    The bug was: CLI discovers /repo/.issues/ and passes it as root_path to
+    Graph__Repository__Factory.create_local_disk(). The factory created
     Storage_FS__Local_Disk(root_path='/repo/.issues') but the path handler
-    still uses base_path='.issues', causing all paths to resolve to
+    still used base_path='.issues', causing all paths to resolve to
     /repo/.issues/.issues/... instead of /repo/.issues/...
+
+    The fix: all path handler methods now return relative paths without
+    prepending base_path, since storage already handles the root path.
     """
 
     @classmethod
@@ -53,7 +58,7 @@ class test__bug__Double_Path_Prefix(TestCase):
         assert folder_exists(cls.repo_folder) is False
 
     # ═══════════════════════════════════════════════════════════════════════════════
-    # Angle 1: Path handler default always prepends .issues
+    # Angle 1: Path handler returns relative paths (no base_path prefix)
     # ═══════════════════════════════════════════════════════════════════════════════
 
     def test_path_handler_default_base_path_is_dot_issues(self):                  # The default is '.issues'
@@ -61,35 +66,34 @@ class test__bug__Double_Path_Prefix(TestCase):
             assert _.base_path == '.issues'                                     # This is the root cause
             assert _.obj()     == __(base_path='.issues')
 
-    def test_bug__path_handler_prepends_dot_issues_to_config(self):                    # Config paths get .issues/ prefix
+    def test__regression__path_handler_returns_relative_config_path(self):             # Config paths are relative
         handler = Path__Handler__Graph_Node()
-        assert handler.path_for_node_types() == '.issues/config/node-types.json'       # BUG: should be 'config/node-types.json'
-                                                                                       # when storage root is already .issues/
+        assert handler.path_for_node_types() == 'config/node-types.json'               # FIXED: no .issues/ prefix
 
-    def test_bug__path_handler_prepends_dot_issues_to_data(self):                      # Data paths get .issues/ prefix
+    def test__regression__path_handler_returns_relative_data_path(self):                # Data paths are relative
         handler = Path__Handler__Graph_Node()
         path = handler.path_for_issue_json(node_type = Safe_Str__Node_Type('bug'),
                                            label     = Safe_Str__Node_Label('Bug-1'))
-        assert path == '.issues/data/bug/Bug-1/issue.json'                             # BUG: should be 'data/bug/Bug-1/issue.json'
+        assert path == 'data/bug/Bug-1/issue.json'                                    # FIXED: no .issues/ prefix
 
-    def test_bug__path_handler_prepends_dot_issues_to_index(self):                     # Index paths get .issues/ prefix
+    def test__regression__path_handler_returns_relative_index_path(self):               # Index paths are relative
         handler = Path__Handler__Graph_Node()
-        assert handler.path_for_global_index() == '.issues/_index.json'                # BUG: should be '_index.json'
+        assert handler.path_for_global_index() == '_index.json'                        # FIXED: no .issues/ prefix
 
     # ═══════════════════════════════════════════════════════════════════════════════
-    # Angle 2: Factory does NOT override the path handler's base_path
+    # Angle 2: Factory still uses default base_path (but it no longer matters)
     # ═══════════════════════════════════════════════════════════════════════════════
 
-    def test_bug__factory_creates_path_handler_with_default_base_path(self):           # Factory uses default .issues base
+    def test__regression__factory_creates_path_handler_with_default_base_path(self):    # Factory uses default .issues base
         repo = Graph__Repository__Factory.create_local_disk(root_path=self.issues_dir)
-        assert str(repo.path_handler.base_path) == '.issues'                           # BUG: should be '' or '.' since
-                                                                                       # storage root is already .issues/
+        assert str(repo.path_handler.base_path) == '.issues'                           # base_path is still '.issues'
+                                                                                       # but path methods ignore it
 
-    def test_bug__factory_memory_backend_also_has_default_base_path(self):             # Memory backend has same default
+    def test__regression__factory_memory_backend_also_has_default_base_path(self):      # Memory backend has same default
         repo = Graph__Repository__Factory.create_memory()
         assert str(repo.path_handler.base_path) == '.issues'                           # Same default in all backends
 
-    def test_bug__all_factory_methods_use_same_default(self):                          # All factory methods share the bug
+    def test__regression__all_factory_methods_use_same_default(self):                   # All factory methods share same default
         repo_local  = Graph__Repository__Factory.create_local_disk(root_path=self.issues_dir)
         repo_memory = Graph__Repository__Factory.create_memory()
 
@@ -97,18 +101,19 @@ class test__bug__Double_Path_Prefix(TestCase):
         assert str(repo_memory.path_handler.base_path) == '.issues'
 
     # ═══════════════════════════════════════════════════════════════════════════════
-    # Angle 3: Storage root + path handler = doubled path
+    # Angle 3: Storage root + path handler = correct path (no doubling)
     # ═══════════════════════════════════════════════════════════════════════════════
 
-    def test_bug__effective_path_is_doubled(self):                                     # The combination doubles .issues
+    def test__regression__effective_path_is_not_doubled(self):                          # The combination no longer doubles
         repo = Graph__Repository__Factory.create_local_disk(root_path=self.issues_dir)
         storage_root  = repo.storage_fs.root_path                                      # e.g., /tmp/xxx/.issues
-        handler_path  = repo.path_handler.path_for_node_types()                        # .issues/config/node-types.json
+        handler_path  = repo.path_handler.path_for_node_types()                        # config/node-types.json
 
         effective_path = os.path.join(storage_root, handler_path)
-        assert '/.issues/.issues/' in effective_path                                   # BUG: double .issues in path
+        assert '/.issues/.issues/' not in effective_path                               # FIXED: no double .issues
+        assert effective_path.endswith('/config/node-types.json')
 
-    def test_bug__effective_config_path_does_not_exist_on_real_repo(self):              # Doubled path doesn't match real files
+    def test__regression__effective_config_path_exists_on_real_repo(self):              # Config path now matches real files
         # Create a real .issues/config/node-types.json at the correct location
         config_dir = os.path.join(self.issues_dir, 'config')
         os.makedirs(config_dir, exist_ok=True)
@@ -119,12 +124,13 @@ class test__bug__Double_Path_Prefix(TestCase):
         # The file exists at the correct path
         assert os.path.exists(types_file) is True                                      # .issues/config/node-types.json exists
 
-        # But the factory-created repo cannot see it
+        # The factory-created repo CAN now see it
         repo = Graph__Repository__Factory.create_local_disk(root_path=self.issues_dir)
         loaded_types = repo.node_types_load()
-        assert loaded_types == []                                                      # BUG: returns empty despite file existing
+        assert len(loaded_types) == 1                                                  # FIXED: finds the types
+        assert loaded_types[0].name == 'bug'
 
-    def test__regression__effective_data_path_does_not_exist_on_real_repo(self):              # Real issue files are invisible
+    def test__regression__effective_data_path_does_not_exist_on_real_repo(self):              # Real issue files are visible
         node_type       = 'bug'
         node_label      = 'Bug-1'
         issue_folder    = f'data/{node_type}/{node_label}'
@@ -153,7 +159,7 @@ class test__bug__Double_Path_Prefix(TestCase):
             assert type(_.memory_fs ) is Memory_FS
             assert type(_.storage_fs) is Storage_FS__Local_Disk                                 # confirm storage type
             assert issue_file_path             == 'data/bug/Bug-1/issue.json'                   # confirm expect path
-            assert _.storage_fs.files__paths() == [issue_file_path]                             # confirm issue_file_path exists in storage
+            assert issue_file_path in _.storage_fs.files__paths()                               # confirm issue_file_path exists in storage
 
             node       = _.node_load(node_type = Safe_Str__Node_Type('bug'),
                                label     = Safe_Str__Node_Label('Bug-1'))
@@ -181,29 +187,7 @@ class test__bug__Double_Path_Prefix(TestCase):
             assert type(path      ) is Safe_Str__File__Path                                       # confirm correct types
             assert type(path_issue) is Safe_Str__File__Path
 
-            # assert node is None                                                                 # BUG: returns None for existing issue
-            #
-            # path = _.get_issue_file_path(node_type, node_label)                                 # this is the method called by _.node_load
-            # assert path is None                                                                 # BUG (this should not be None)
-            #
-            # path_issue = _.path_handler.path_for_issue_json(node_type, node_label)              # this is the method called by _.get_issue_file_path
-            # assert path_issue == '.issues/data/bug/Bug-1/issue.json'                            # BUG  issues should not be here
-            # assert path_issue == f'.issues/{issue_file_path}'                                   # BUG  confirm that issue_file_path match
-            # assert _.storage_fs.file__exists(path_issue) is False                               # BUG this should be true
-            # assert _.storage_fs.file__exists(issue_file_path) is True                           # confirms the issue is there
-            #
-            # # from this analysis above we can tell that the issue is in path_for_issue_json , since it should not return the .issues in the path
-            # #      because the _.storage_fs is already on that folder
-
-
-
-
-
-
-    def test_bug__nodes_list_all_bypasses_path_handler(self):                         # nodes_list_all uses raw file scan
-        # nodes_list_all() uses storage_fs.files__paths() which scans ALL files
-        # under the storage root. It does NOT go through the path handler.
-        # So it CAN find issues even though path-handler-based operations can't.
+    def test__regression__nodes_list_all_consistent_with_node_load(self):               # Both APIs now return same results
         test_issues = os.path.join(self.repo_folder, '.issues_list_all_test')
         os.makedirs(test_issues, exist_ok=True)
 
@@ -217,17 +201,18 @@ class test__bug__Double_Path_Prefix(TestCase):
 
         repo  = Graph__Repository__Factory.create_local_disk(root_path=test_issues)
         nodes = repo.nodes_list_all()
-        assert len(nodes) == 1                                                         # WORKS: raw scan finds the issue
+        assert len(nodes) == 1                                                         # Raw scan finds the issue
 
-        # But path-handler-based load CANNOT find the same issue
+        # Path-handler-based load NOW ALSO finds the same issue
         node = repo.node_load(node_type=Safe_Str__Node_Type('task'),
                               label=Safe_Str__Node_Label('Task-1'))
-        assert node is None                                                            # BUG: path handler doubles the path
+        assert node is not None                                                        # FIXED: path handler works
+        assert node.title == 'A real task'
 
         # Cleanup
         shutil.rmtree(test_issues)
 
-    def test_bug__node_load_by_label_bypasses_path_handler(self):                     # label-based load also uses raw scan
+    def test__regression__node_load_by_label_consistent_with_node_load(self):          # Both load APIs now agree
         test_issues = os.path.join(self.repo_folder, '.issues_label_test')
         os.makedirs(test_issues, exist_ok=True)
 
@@ -246,20 +231,21 @@ class test__bug__Double_Path_Prefix(TestCase):
         assert by_label is not None                                                    # WORKS: raw file scan
         assert by_label.title == 'Found by label scan'
 
-        # node_load() uses path handler → broken
+        # node_load() uses path handler → NOW ALSO WORKS
         by_type = repo.node_load(node_type=Safe_Str__Node_Type('bug'),
                                  label=Safe_Str__Node_Label('Bug-7'))
-        assert by_type is None                                                         # BUG: path handler doubles path
+        assert by_type is not None                                                     # FIXED: path handler works
+        assert by_type.title == 'Found by label scan'
 
-        # Same issue, two APIs, different results
+        # Both APIs now return the same result
         # Cleanup
         shutil.rmtree(test_issues)
 
     # ═══════════════════════════════════════════════════════════════════════════════
-    # Angle 4: Test-created data lands in .issues/.issues/... on disk
+    # Angle 4: Data lands at the CORRECT path on disk
     # ═══════════════════════════════════════════════════════════════════════════════
 
-    def test_bug__factory_writes_to_doubled_path_on_disk(self):                        # Data written through factory lands in wrong place
+    def test__regression__factory_writes_to_correct_path_on_disk(self):                # Data written through factory lands in right place
         test_issues_dir = os.path.join(self.repo_folder, '.issues_write_test')
         os.makedirs(test_issues_dir, exist_ok=True)
 
@@ -274,19 +260,18 @@ class test__bug__Double_Path_Prefix(TestCase):
         correct_path = os.path.join(test_issues_dir, 'config', 'node-types.json')
         doubled_path = os.path.join(test_issues_dir, '.issues', 'config', 'node-types.json')
 
-        assert os.path.exists(correct_path) is False                                   # BUG: NOT at the correct location
-        assert os.path.exists(doubled_path) is True                                    # BUG: at the doubled location
+        assert os.path.exists(correct_path) is True                                    # FIXED: at the correct location
+        assert os.path.exists(doubled_path) is False                                   # FIXED: not at the doubled location
 
         # Cleanup
         shutil.rmtree(test_issues_dir)
 
-    def test_bug__factory_writes_issue_to_doubled_path_on_disk(self):                  # Issue data also lands in wrong place
+    def test__regression__factory_writes_issue_to_correct_path_on_disk(self):          # Issue data also lands in right place
         test_issues_dir = os.path.join(self.repo_folder, '.issues_issue_test')
         os.makedirs(test_issues_dir, exist_ok=True)
 
         repo = Graph__Repository__Factory.create_local_disk(root_path=test_issues_dir)
 
-        from issues_fs.schemas.graph.Schema__Node import Schema__Node
         node = Schema__Node(node_type = 'bug',
                             label     = 'Bug-99',
                             title     = 'Test bug',
@@ -296,17 +281,17 @@ class test__bug__Double_Path_Prefix(TestCase):
         correct_path = os.path.join(test_issues_dir, 'data', 'bug', 'Bug-99', 'issue.json')
         doubled_path = os.path.join(test_issues_dir, '.issues', 'data', 'bug', 'Bug-99', 'issue.json')
 
-        assert os.path.exists(correct_path) is False                                   # BUG: NOT at the correct location
-        assert os.path.exists(doubled_path) is True                                    # BUG: at the doubled location
+        assert os.path.exists(correct_path) is True                                    # FIXED: at the correct location
+        assert os.path.exists(doubled_path) is False                                   # FIXED: not at the doubled location
 
         # Cleanup
         shutil.rmtree(test_issues_dir)
 
     # ═══════════════════════════════════════════════════════════════════════════════
-    # Angle 5: Round-trip through factory hides the bug (why existing tests pass)
+    # Angle 5: Round-trip through factory works AND files are at correct location
     # ═══════════════════════════════════════════════════════════════════════════════
 
-    def test_bug__round_trip_masks_the_bug(self):                                      # Write+read through factory works
+    def test__regression__round_trip_works(self):                                       # Write+read through factory works
         test_issues_dir = os.path.join(self.repo_folder, '.issues_roundtrip_test')
         os.makedirs(test_issues_dir, exist_ok=True)
 
@@ -317,21 +302,20 @@ class test__bug__Double_Path_Prefix(TestCase):
         types = [Schema__Node__Type(name='bug', description='Bug report')]
         repo.node_types_save(types)
 
-        # Read types through same factory → works! (both use doubled path)
+        # Read types through same factory → works
         loaded = repo.node_types_load()
-        assert len(loaded) == 1                                                        # Passes because read also uses doubled path
+        assert len(loaded) == 1
         assert loaded[0].name == 'bug'
 
         # Cleanup
         shutil.rmtree(test_issues_dir)
 
-    def test_bug__round_trip_for_nodes_masks_the_bug(self):                            # Node save+load through factory works
+    def test__regression__round_trip_for_nodes_at_correct_path(self):                  # Node save+load works, files at right place
         test_issues_dir = os.path.join(self.repo_folder, '.issues_node_rt_test')
         os.makedirs(test_issues_dir, exist_ok=True)
 
         repo = Graph__Repository__Factory.create_local_disk(root_path=test_issues_dir)
 
-        from issues_fs.schemas.graph.Schema__Node import Schema__Node
         node = Schema__Node(node_type = 'bug',
                             label     = 'Bug-42',
                             title     = 'Round trip bug',
@@ -340,25 +324,25 @@ class test__bug__Double_Path_Prefix(TestCase):
 
         loaded = repo.node_load(node_type = Safe_Str__Node_Type('bug'),
                                 label     = Safe_Str__Node_Label('Bug-42'))
-        assert loaded is not None                                                      # Passes because both go through doubled path
+        assert loaded is not None
         assert loaded.label == 'Bug-42'
         assert loaded.title == 'Round trip bug'
 
-        # But the file is at the WRONG location on disk
+        # The file is at the CORRECT location on disk
         correct_path = os.path.join(test_issues_dir, 'data', 'bug', 'Bug-42', 'issue.json')
         doubled_path = os.path.join(test_issues_dir, '.issues', 'data', 'bug', 'Bug-42', 'issue.json')
-        assert os.path.exists(correct_path) is False                                   # Not where you'd expect
-        assert os.path.exists(doubled_path) is True                                    # At the wrong doubled location
+        assert os.path.exists(correct_path) is True                                    # FIXED: at the correct location
+        assert os.path.exists(doubled_path) is False                                   # FIXED: not at the doubled location
 
         # Cleanup
         shutil.rmtree(test_issues_dir)
 
 
     # ═══════════════════════════════════════════════════════════════════════════════
-    # Angle 7: Real .issues/ repos from the ecosystem are unreadable
+    # Angle 7: Real .issues/ repos from the ecosystem are now readable
     # ═══════════════════════════════════════════════════════════════════════════════
 
-    def test_bug__real_repo_split_behaviour(self):                                    # Simulate a real repo's .issues/
+    def test__regression__real_repo_all_operations_work(self):                          # All operations work on real repo
         real_issues = os.path.join(self.repo_folder, '.issues_real_repo')
         os.makedirs(real_issues, exist_ok=True)
 
@@ -404,7 +388,7 @@ class test__bug__Double_Path_Prefix(TestCase):
 
         repo = Graph__Repository__Factory.create_local_disk(root_path=real_issues)
 
-        # === Path-handler-based operations: ALL BROKEN ===
+        # === ALL path-handler-based operations NOW WORK ===
         node_types  = repo.node_types_load()
         link_types  = repo.link_types_load()
         bug_1       = repo.node_load(node_type=Safe_Str__Node_Type('bug'),
@@ -412,33 +396,33 @@ class test__bug__Double_Path_Prefix(TestCase):
         bug_1_exist = repo.node_exists(node_type=Safe_Str__Node_Type('bug'),
                                        label=Safe_Str__Node_Label('Bug-1'))
 
-        assert node_types  == []                                                       # BUG: 3 types defined, sees 0
-        assert link_types  == []                                                       # BUG: 1 link type defined, sees 0
-        assert bug_1       is None                                                     # BUG: Bug-1 exists, returns None
-        assert bug_1_exist is False                                                    # BUG: Bug-1 exists, returns False
+        assert len(node_types) == 3                                                    # FIXED: sees all 3 types
+        assert len(link_types) == 1                                                    # FIXED: sees the link type
+        assert bug_1           is not None                                             # FIXED: Bug-1 found
+        assert bug_1.title     == 'Real bug number 1'
+        assert bug_1_exist     is True                                                 # FIXED: Bug-1 exists
 
-        # === Raw-scan-based operations: WORK (bypass path handler) ===
+        # === Raw-scan-based operations: ALSO WORK (as before) ===
         all_nodes       = repo.nodes_list_all()
         bug_1_by_label  = repo.node_load_by_label(label=Safe_Str__Node_Label('Bug-1'))
         bug_1_path      = repo.node_find_path_by_label(label=Safe_Str__Node_Label('Bug-1'))
 
-        assert len(all_nodes)      == 5                                                # WORKS: raw scan finds all 5 issues
-        assert bug_1_by_label      is not None                                         # WORKS: label scan finds Bug-1
+        assert len(all_nodes)      == 5                                                # Raw scan finds all 5 issues
+        assert bug_1_by_label      is not None                                         # Label scan finds Bug-1
         assert bug_1_by_label.title == 'Real bug number 1'
-        assert bug_1_path          is not None                                         # WORKS: path scan finds Bug-1
+        assert bug_1_path          is not None                                         # Path scan finds Bug-1
 
-        # This is the core inconsistency: two APIs for the same data, different results
-        # node_load(type, label) → None (uses path handler → doubled path)
-        # node_load_by_label(label) → found (uses raw file scan)
+        # Both APIs now return consistent results
+        assert bug_1.title == bug_1_by_label.title
 
         # Cleanup
         shutil.rmtree(real_issues)
 
     # ═══════════════════════════════════════════════════════════════════════════════
-    # Angle 8: What correct behaviour would look like (base_path='')
+    # Angle 8: Verify the fix works with empty base_path too
     # ═══════════════════════════════════════════════════════════════════════════════
 
-    def test_bug__empty_base_path_would_fix_the_issue(self):                           # Demonstrates the fix direction
+    def test__regression__empty_base_path_still_works(self):                            # Empty base_path also works
         real_issues = os.path.join(self.repo_folder, '.issues_fix_demo')
         os.makedirs(real_issues, exist_ok=True)
 
@@ -455,14 +439,8 @@ class test__bug__Double_Path_Prefix(TestCase):
                         'title'    : 'This should be visible',
                         'status'   : 'backlog'}, f)
 
-        # Manually create repo with empty base_path (the fix)
-        from memory_fs.Memory_FS import Memory_FS
-        memory_fs            = Memory_FS()
-        storage              = Storage_FS__Local_Disk(root_path=real_issues)
-        memory_fs.storage_fs = storage
-        path_handler         = Path__Handler__Graph_Node(base_path='.')                # Fix: use '.' instead of '.issues'
-
-        repo = Graph__Repository(memory_fs=memory_fs, path_handler=path_handler)
+        # Create repo with default path handler (base_path='.issues' but no longer used in paths)
+        repo = Graph__Repository__Factory.create_local_disk(root_path=real_issues)
 
         # NOW it can see the real files
         node_types = repo.node_types_load()

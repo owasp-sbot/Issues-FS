@@ -227,13 +227,13 @@ class test_Root__Issue__Service(TestCase):
     # ═══════════════════════════════════════════════════════════════════════════════
 
     def test__root_issue_path__correct(self):                                    # Test root issue path
-        expected_path = '.issues/issue.json'
+        expected_path = 'issue.json'
 
         assert self.path_handler.path_for_root_issue() == expected_path
 
     def test__root_issue_path__custom_base(self):                                # Test with custom base path
         custom_handler = Path__Handler__Graph_Node(base_path='custom/.issues')
 
-        expected_path = 'custom/.issues/issue.json'
+        expected_path = 'issue.json'                                             # base_path no longer affects paths
 
         assert custom_handler.path_for_root_issue() == expected_path
