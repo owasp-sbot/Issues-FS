@@ -1,0 +1,45 @@
+{
+  "node_id": "a1b2c3e2",
+  "node_type": "task",
+  "node_index": 16,
+  "label": "Task-16",
+  "title": "Create shareable workflow document for agentic role-based development setup",
+  "status": "done",
+  "tags": ["librarian", "documentation", "workflow", "knowledge-request", "reusable"],
+  "properties": {
+    "assigned_to": "Librarian",
+    "requested_by": "Human (Conductor)",
+    "description": "Create a single, self-contained document that explains the current agentic development workflow used in the Issues-FS ecosystem. This document will be used as a template/guide for setting up similar agentic workflows on OTHER projects. It must be written to be project-agnostic and NOT dependent on a multi-repo architecture.",
+    "requirements": [
+      "MUST be a single document (not spread across multiple files)",
+      "MUST be project-agnostic — explain the pattern, not Issues-FS specifics",
+      "MUST NOT assume multi-repo / submodule architecture — the target project is smaller and uses a single repo",
+      "MUST be usable as a starting point for a new project with a similar agentic setup"
+    ],
+    "content_to_cover": [
+      "The role-based agent coordination model (Conductor, Architect, Dev, QA, DevOps, Librarian + extensible)",
+      "How ROLE.md files work as both human documentation AND agent briefing",
+      "The hub-and-spoke subagent pattern (parent Conductor spawns role-specific agents)",
+      "How Issues-FS (or any file-based issue tracker) serves as the coordination bus between agents",
+      "The typed issue state machine (Task, Handoff, Decision, Defect, Approval, Knowledge_Request, etc.)",
+      "How agents communicate via issues and file artifacts (not direct messaging)",
+      "The review workflow: Architect plans -> Dev executes -> QA reviews -> Conductor approves",
+      "How LLM guidance docs (briefs, coding standards) ground agent behaviour",
+      "The task lifecycle: todo -> in-progress -> done, with dev_notes and comments",
+      "Code comment traceability (referencing issue labels in code)",
+      "How to adapt this to a single-repo project (roles/ as folders, not separate repos)",
+      "Lessons learned: what worked, what didn't, what to watch for (e.g. type safety regressions, agent context limits, background agent timeouts)"
+    ],
+    "target_output": "modules/Issues-FS__Docs/docs/development/guide__agentic-role-based-workflow.md",
+    "source_material": [
+      "roles/Issues-FS__Dev__Role__*/ROLE.md (all 7 role definitions)",
+      "roles/Issues-FS__Dev__Role__Librarian/docs/project-brief.md",
+      "modules/Issues-FS__Docs/docs/to_classify/v0.1.0__issues-fs__role-based-agent-coordination.md",
+      "The current Claude Code session transcript (this is a living example of the workflow in action)",
+      "roles/Issues-FS__Dev__Role__Architect/docs/plan__phase-2-refactoring.md (example of Architect output)",
+      "roles/Issues-FS__Dev__Role__QA/docs/review__phase-2-b10-b13.md (example of QA output)",
+      "modules/Issues-FS/.issues/ (example of issue-based coordination)"
+    ],
+    "notes": "This is high priority — the project owner needs this for a new project they are starting. The document should be practical and actionable, not theoretical. Think of it as a 'getting started guide for agentic development' that someone could follow to set up their own role-based AI agent team on any project."
+  }
+}

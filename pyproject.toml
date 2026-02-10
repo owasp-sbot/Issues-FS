@@ -1,6 +1,6 @@
 [tool.poetry]
 name        = "issues_fs"
-version     = "v0.4.0"
+version     = "v0.4.7"
 description = "Issues-FS"
 authors     = ["Dinis Cruz <dinis.cruz@owasp.org>"]
 license     = "Apache 2.0"
@@ -12,6 +12,7 @@ repository  = "https://github.com/owasp-sbot/Issues-FS"
 python            = "^3.12"
 osbot-utils       = "*"
 memory_fs         = "*"
+issues-fs-cli     = "*"
 
 [build-system]
 requires = ["poetry-core>=1.9.1"]

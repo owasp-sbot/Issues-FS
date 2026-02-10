@@ -1,0 +1,20 @@
+{
+  "node_id": "a1b2c3d5",
+  "node_type": "task",
+  "node_index": 6,
+  "label": "Task-6",
+  "title": "Config CRUD node types update method (B15)",
+  "status": "done",
+  "tags": ["phase-2", "refactoring", "B15"],
+  "properties": {
+    "brief_task_id": "B15",
+    "target_files": [
+      "issues_fs/issues/graph_services/Type__Service.py",
+      "issues_fs/schemas/graph/Schema__Node__Type.py"
+    ],
+    "depends_on": [],
+    "has_provided_code": false,
+    "description": "Create Schema__Node__Type__Update schema. Add update_node_type(name, updates) method to Type__Service. No provided implementation code -- implement from brief specification.",
+    "dev_notes": "Created Schema__Node__Type__Update (pure data container) and Schema__Node__Type__Update__Response in issues_fs/schemas/graph/Schema__Node__Type__Update.py. Added update_node_type method to Type__Service with partial update support (display_name, description, icon, color, statuses, default_status). Method uses @type_safe decorator and Safe_* types. 7 new tests in test_Type__Service__B15__Update_Node_Type.py. All 394 tests pass."
+  }
+}

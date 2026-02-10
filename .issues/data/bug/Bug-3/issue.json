@@ -1,0 +1,30 @@
+{
+  "node_id": "e5f6a7b8",
+  "node_type": "bug",
+  "node_index": 3,
+  "label": "Bug-3",
+  "title": "get_issue_file_path returns raw str instead of Safe_Str__File__Path -- not fixed during B13 refactoring",
+  "status": "resolved",
+  "tags": ["type-safety", "P2", "phase-2", "B13", "review-needed"],
+  "properties": {
+    "priority": "P2",
+    "severity": "major",
+    "introduced_by": "Pre-existing, but touched in Task-4 (B13) without fixing",
+    "found_by": "QA review",
+    "description": "Graph__Repository.get_issue_file_path() at line 131 has return type -> str when it should be -> Safe_Str__File__Path. This method is the central path-resolution function called by node_load, node_exists, and other critical paths. During the B13 refactoring, the Dev modified this method's body (removed node.json fallback, added explicit is True check) and updated its comments, but did not fix the raw str return type. Since Safe_Str__File__Path is already imported in this file (line 22), this should have been corrected as part of the B13 changes.",
+    "files_affected": [
+      {
+        "file": "issues_fs/issues/graph_services/Graph__Repository.py",
+        "line": 131,
+        "change": "return type is -> str, should be -> Safe_Str__File__Path",
+        "severity": "MAJOR"
+      }
+    ],
+    "required_action": [
+      "Change return type from -> str to -> Safe_Str__File__Path",
+      "Wrap return value in Safe_Str__File__Path() before returning",
+      "Verify callers handle the Safe_Str__File__Path type correctly"
+    ],
+    "convention_violation": "Methods that return file paths must use Safe_Str__File__Path, not raw str. This was a missed opportunity during the B13 refactoring when the method body was already being modified."
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "node_id": "a1b2c3d7",
+  "node_type": "task",
+  "node_index": 8,
+  "label": "Task-8",
+  "title": "Root scoping verification for query results (B17)",
+  "status": "done",
+  "tags": ["phase-2", "refactoring", "B17"],
+  "properties": {
+    "brief_task_id": "B17",
+    "target_files": [
+      "issues_fs/issues/graph_services/Node__Service.py"
+    ],
+    "depends_on": ["Task-1", "Task-5"],
+    "has_provided_code": true,
+    "description": "Update list_nodes() to get root filter from root_selection_service. Rewrite list_nodes_for_type() to accept root_path parameter and use nodes_list_all(root_path) with node_load_by_path() instead of nodes_list_labels().",
+    "dev_notes": "Implemented get_current_root_path() to extract root from root_selection_service. Updated list_nodes() to pass current_root to list_nodes_for_type(). Rewrote list_nodes_for_type() to use nodes_list_all(root_path) with node_load_by_path() for path-based loading with root filtering. 13 tests in test_Node__Service__B17__Root_Scoping.py covering: no root service, empty root, root set, type filtering with root, deeply nested scoping, total count verification. All 414 tests pass."
+  }
+}

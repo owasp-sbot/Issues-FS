@@ -204,10 +204,10 @@ class test_Root__Selection__Service(TestCase):
 
         assert self.service.is_valid_root('.issues/data/task/Task-1') is True
 
-    def test__is_valid_root__with_node_json(self):                               # Test folder with node.json (legacy)
+    def test__is_valid_root__false_for_node_json_only(self):                     # Phase 2 (B13): No node.json fallback
         self.create_issue_at_path('.issues/data/bug/Bug-1/node.json')
 
-        assert self.service.is_valid_root('.issues/data/bug/Bug-1') is True
+        assert self.service.is_valid_root('.issues/data/bug/Bug-1') is False     # Phase 2 (B13): No fallback
 
     def test__is_valid_root__without_issue_file(self):                           # Test folder without issue file
         assert self.service.is_valid_root('.issues/data/task/NoIssue') is False
@@ -217,7 +217,7 @@ class test_Root__Selection__Service(TestCase):
     # ═══════════════════════════════════════════════════════════════════════════════
 
     def test__root_with_issue_json__uses_metadata(self):                         # Test root issue.json is read
-        root_path = '.issues/issue.json'
+        root_path = 'issue.json'
         self.create_issue_at_path(root_path                  ,
                                   label     = 'Gitrepo-1'    ,
                                   title     = 'My Project'   ,

@@ -1,0 +1,19 @@
+{
+  "node_id": "a1b2c3d2",
+  "node_type": "task",
+  "node_index": 3,
+  "label": "Task-3",
+  "title": "Delete legacy node.json on save (B12)",
+  "status": "done",
+  "tags": ["phase-2", "refactoring", "B12"],
+  "properties": {
+    "brief_task_id": "B12",
+    "target_files": [
+      "issues_fs/issues/graph_services/Graph__Repository.py"
+    ],
+    "depends_on": [],
+    "has_provided_code": true,
+    "description": "Update node_save() to call delete_legacy_node_json() after successful save. Add delete_legacy_node_json(node_type, label) method that removes node.json if it exists.",
+    "dev_notes": "Added delete_legacy_node_json(node_type, label) method to Graph__Repository that checks for node.json and deletes it if found. Updated node_save() to call delete_legacy_node_json() after successful issue.json save. Updated Phase 1 test test__node_save__preserves_existing_node_json to test__node_save__deletes_existing_node_json reflecting B12 behavior. 5 Phase 2 B12 tests created and passing."
+  }
+}

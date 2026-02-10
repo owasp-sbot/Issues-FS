@@ -31,7 +31,7 @@ class test_Path__Handler__Graph_Node__Phase_1(TestCase):
 
         result = self.path_handler.path_for_issue_json(node_type, label)
 
-        assert result == '.issues/data/bug/Bug-1/issue.json'
+        assert result == 'data/bug/Bug-1/issue.json'
 
     def test__path_for_issue_json__task(self):                                   # Test issue.json for task
         node_type = Safe_Str__Node_Type('task')
@@ -39,7 +39,7 @@ class test_Path__Handler__Graph_Node__Phase_1(TestCase):
 
         result = self.path_handler.path_for_issue_json(node_type, label)
 
-        assert result == '.issues/data/task/Task-42/issue.json'
+        assert result == 'data/task/Task-42/issue.json'
 
     def test__path_for_issue_json__git_repo(self):                               # Test issue.json for git-repo type
         node_type = Safe_Str__Node_Type('git-repo')
@@ -47,7 +47,7 @@ class test_Path__Handler__Graph_Node__Phase_1(TestCase):
 
         result = self.path_handler.path_for_issue_json(node_type, label)
 
-        assert result == '.issues/data/git-repo/Gitrepo-1/issue.json'
+        assert result == 'data/git-repo/Gitrepo-1/issue.json'
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # path_for_node_json Tests (Legacy)
@@ -59,7 +59,7 @@ class test_Path__Handler__Graph_Node__Phase_1(TestCase):
 
         result = self.path_handler.path_for_node_json(node_type, label)
 
-        assert result == '.issues/data/bug/Bug-1/node.json'
+        assert result == 'data/bug/Bug-1/node.json'
 
     def test__path_for_node__returns_node_json(self):                            # Test deprecated method returns node.json
         node_type = Safe_Str__Node_Type('bug')
@@ -67,7 +67,7 @@ class test_Path__Handler__Graph_Node__Phase_1(TestCase):
 
         result = self.path_handler.path_for_node(node_type, label)
 
-        assert result == '.issues/data/bug/Bug-1/node.json'                      # Should match path_for_node_json
+        assert result == 'data/bug/Bug-1/node.json'                              # Should match path_for_node_json
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # path_for_root_issue Tests
@@ -76,14 +76,14 @@ class test_Path__Handler__Graph_Node__Phase_1(TestCase):
     def test__path_for_root_issue(self):                                         # Test root issue.json path
         result = self.path_handler.path_for_root_issue()
 
-        assert result == '.issues/issue.json'
+        assert result == 'issue.json'
 
     def test__path_for_root_issue__custom_base(self):                            # Test root issue with custom base
         handler = Path__Handler__Graph_Node(base_path='my-issues')
 
         result = handler.path_for_root_issue()
 
-        assert result == 'my-issues/issue.json'
+        assert result == 'issue.json'                                            # base_path no longer affects paths
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # path_for_issues_folder Tests (Hierarchical Structure)
@@ -95,7 +95,7 @@ class test_Path__Handler__Graph_Node__Phase_1(TestCase):
 
         result = self.path_handler.path_for_issues_folder(node_type, label)
 
-        assert result == '.issues/data/feature/Feature-1/issues'
+        assert result == 'data/feature/Feature-1/issues'
 
     def test__path_for_issues_folder__git_repo(self):                            # Test issues/ folder for git-repo
         node_type = Safe_Str__Node_Type('git-repo')
@@ -103,7 +103,7 @@ class test_Path__Handler__Graph_Node__Phase_1(TestCase):
 
         result = self.path_handler.path_for_issues_folder(node_type, label)
 
-        assert result == '.issues/data/git-repo/Gitrepo-1/issues'
+        assert result == 'data/git-repo/Gitrepo-1/issues'
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # Path Consistency Tests
@@ -142,7 +142,7 @@ class test_Path__Handler__Graph_Node__Phase_1(TestCase):
 
         result = handler.path_for_issue_json(node_type, label)
 
-        assert result == 'custom/.issues/data/bug/Bug-1/issue.json'
+        assert result == 'data/bug/Bug-1/issue.json'                             # base_path no longer affects paths
 
     def test__custom_base_path__issues_folder(self):                             # Test issues/ with custom base
         handler   = Path__Handler__Graph_Node(base_path='custom/.issues')
@@ -151,4 +151,4 @@ class test_Path__Handler__Graph_Node__Phase_1(TestCase):
 
         result = handler.path_for_issues_folder(node_type, label)
 
-        assert result == 'custom/.issues/data/feature/Feature-1/issues'
+        assert result == 'data/feature/Feature-1/issues'                         # base_path no longer affects paths

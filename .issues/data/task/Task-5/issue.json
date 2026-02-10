@@ -1,0 +1,18 @@
+{
+  "node_id": "a1b2c3d4",
+  "node_type": "task",
+  "node_index": 5,
+  "label": "Task-5",
+  "title": "Hierarchical path resolution endpoint (B14)",
+  "status": "todo",
+  "tags": ["phase-2", "refactoring", "B14"],
+  "properties": {
+    "brief_task_id": "B14",
+    "target_files": [
+      "issues_fs/issues/graph_services/Node__Service.py"
+    ],
+    "depends_on": ["Task-1", "Task-2"],
+    "has_provided_code": true,
+    "description": "Add root_selection_service attribute to Node__Service. Add resolve_hierarchical_path(path, current_root) and get_node_by_hierarchical_path(path) methods. Add get_current_root_path() helper. Import Root__Selection__Service. NOTE: Routes__Nodes.py changes belong in Issues-FS__Service repo (cross-repo)."
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "node_id": "c3d4e5f6",
+  "node_type": "bug",
+  "node_index": 7,
+  "label": "Bug-7",
+  "title": "get_node_graph uses string-quoted forward reference for return type -- Type_Safe interprets as self-class",
+  "status": "resolved",
+  "tags": ["type-safety", "P1", "phase-2", "review-needed"],
+  "properties": {
+    "priority": "P1",
+    "severity": "major",
+    "introduced_by": "Pre-existing (predates Phase 2)",
+    "found_by": "Human review",
+    "description": "Node__Service.get_node_graph() used -> 'Schema__Graph__Response' (string-quoted forward reference) as its return type annotation. Type_Safe only supports string-quoted class names for the current class itself (e.g. 'Node__Service' inside Node__Service). For any other class, the string-quoted reference is misinterpreted. The fix is to use the direct class reference: -> Schema__Graph__Response (which is already imported).",
+    "files_affected": [
+      {
+        "file": "issues_fs/issues/graph_services/Node__Service.py",
+        "line": 368,
+        "change": "Changed -> 'Schema__Graph__Response' to -> Schema__Graph__Response",
+        "severity": "MAJOR"
+      }
+    ],
+    "required_action": [
+      "Fixed: Changed string-quoted forward reference to direct class reference",
+      "Audit codebase for other string-quoted forward references to non-self classes"
+    ],
+    "new_principle": "Type_Safe only supports string-quoted class names (forward references) for the current class itself. All other return types must use direct class references."
+  }
+}

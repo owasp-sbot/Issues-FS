@@ -1,0 +1,45 @@
+{
+  "node_id": "d8e9f0a1",
+  "node_type": "bug",
+  "node_index": 5,
+  "label": "Bug-5",
+  "title": "Three divergent label generation algorithms produce incompatible formats for hyphenated types",
+  "status": "confirmed",
+  "tags": ["type-safety", "regression", "P2", "phase-2", "B22", "data-consistency"],
+  "properties": {
+    "priority": "P2",
+    "severity": "critical",
+    "introduced_by": "Task-13 (B22) -- incomplete propagation of hyphenated label format",
+    "found_by": "QA review (P2)",
+    "description": "B22 updated Node__Service.label_from_type_and_index to produce hyphenated labels (e.g. 'Git-Repo-1' for type 'git-repo'). However, two other label generation code paths were NOT updated and produce incompatible formats for the same type. Issue__Children__Service.generate_child_label (line 255) joins without hyphens: 'GitRepo-1'. Path__Handler__Graph_Node.label_from_type_and_index (line 184) only capitalizes the first word: 'Git-repo-1'. This means labels generated through different code paths will be mutually unparseable. parse_label_to_type expects the 'Git-Repo-' prefix and will fail to match 'GitRepo-1' labels. The Safe_Str__Node_Label regex accepts both formats, masking the inconsistency.",
+    "files_affected": [
+      {
+        "file": "issues_fs/issues/phase_1/Issue__Children__Service.py",
+        "line": 255,
+        "change": "''.join(p.capitalize() for p in parts) produces 'GitRepo' -- should produce 'Git-Repo' with hyphen separator",
+        "severity": "CRITICAL"
+      },
+      {
+        "file": "issues_fs/issues/phase_1/Issue__Children__Service.py",
+        "line": 271,
+        "change": "get_existing_indices uses same PascalCase logic for prefix matching -- must match the label format used",
+        "severity": "CRITICAL"
+      },
+      {
+        "file": "issues_fs/issues/storage/Path__Handler__Graph_Node.py",
+        "line": 184,
+        "change": "node_type.capitalize() produces 'Git-repo' for 'git-repo' -- should produce 'Git-Repo' with each word capitalized",
+        "severity": "CRITICAL"
+      }
+    ],
+    "required_action": [
+      "Consolidate label generation to a single canonical implementation",
+      "Update Issue__Children__Service.generate_child_label to produce 'Git-Repo-1' format (hyphen-separated, each word capitalized)",
+      "Update Issue__Children__Service.get_existing_indices to match the corrected label prefix format",
+      "Update Path__Handler__Graph_Node.label_from_type_and_index to produce 'Git-Repo-1' format",
+      "Consider extracting a shared label utility to prevent future divergence",
+      "Add cross-service integration test: create child via Issue__Children__Service, resolve via Node__Service.resolve_link_target"
+    ],
+    "convention_violation": "Label format must be consistent across all code paths. The B22 brief explicitly required updating label generation, but the implementation only updated one of three code paths."
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "node_id": "f4a5b6c7",
+  "node_type": "bug",
+  "node_index": 4,
+  "label": "Bug-4",
+  "title": "type_to_label_prefix uses raw str parameter and return type, no @type_safe decorator",
+  "status": "confirmed",
+  "tags": ["type-safety", "regression", "P2", "phase-2", "B22", "review-needed"],
+  "properties": {
+    "priority": "P2",
+    "severity": "critical",
+    "introduced_by": "Task-13 (B22)",
+    "found_by": "QA review (P2)",
+    "description": "The newly introduced method Node__Service.type_to_label_prefix() at line 305 has signature 'def type_to_label_prefix(self, node_type: str) -> str:'. Both the parameter type and return type are raw Python str. The method also lacks the @type_safe decorator. This is a new method introduced in the P2 changeset that violates the project's core convention: NEVER use raw Python types where Safe_* primitives exist. Safe_Str__Node_Type is already imported and used throughout Node__Service.py. The parameter should be Safe_Str__Node_Type and the method should have @type_safe.",
+    "files_affected": [
+      {
+        "file": "issues_fs/issues/graph_services/Node__Service.py",
+        "line": 305,
+        "change": "parameter 'node_type: str' should be 'node_type: Safe_Str__Node_Type'; return type '-> str' should use a Safe_Str variant; @type_safe decorator missing",
+        "severity": "CRITICAL"
+      }
+    ],
+    "required_action": [
+      "Add @type_safe decorator to type_to_label_prefix",
+      "Change parameter type from str to Safe_Str__Node_Type",
+      "Change return type from str to appropriate Safe_Str variant (e.g. Safe_Str__Node_Type_Display or str via @type_safe coercion)",
+      "Update callers if needed after type change"
+    ],
+    "convention_violation": "The Issues-FS project requires Safe_* primitives instead of raw Python types on all method boundaries. New methods introduced in refactoring must not use raw str as parameter or return types when corresponding Safe_* types exist."
+  }
+}

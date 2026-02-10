@@ -1,0 +1,20 @@
+{
+  "node_id": "a1b2c3d0",
+  "node_type": "task",
+  "node_index": 1,
+  "label": "Task-1",
+  "title": "Recursive node discovery (B10)",
+  "status": "done",
+  "tags": ["phase-2", "refactoring", "B10"],
+  "properties": {
+    "brief_task_id": "B10",
+    "target_files": [
+      "issues_fs/schemas/graph/Schema__Node__Info.py",
+      "issues_fs/issues/graph_services/Graph__Repository.py"
+    ],
+    "depends_on": [],
+    "has_provided_code": true,
+    "description": "Create Schema__Node__Info schema and add nodes_list_all(), is_path_under_root(), extract_node_type_from_file() methods to Graph__Repository. Replace existing nodes_list_labels() to use recursive discovery. Add SKIP_LABELS class attribute. Rewrite imports from mgraph_ai_ui_html_transformation_workbench to issues_fs.",
+    "dev_notes": "Created Schema__Node__Info.py with issues_fs imports (Type_Safe, Safe_Str__File__Path, Safe_Str__Node_Type, Safe_Str__Node_Label). Added SKIP_LABELS class attribute to Graph__Repository. Implemented nodes_list_all() with recursive issue.json discovery and root_path filtering. Added is_path_under_root() and extract_node_type_from_file() helpers. Updated nodes_list_labels() to delegate to nodes_list_all(). All imports rewritten to issues_fs. 16 Phase 2 B10 tests created and passing. Updated 3 Phase 1 tests for B10 compatibility."
+  }
+}

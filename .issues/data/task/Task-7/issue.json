@@ -1,0 +1,20 @@
+{
+  "node_id": "a1b2c3d6",
+  "node_type": "task",
+  "node_index": 7,
+  "label": "Task-7",
+  "title": "Config CRUD link types update method (B16)",
+  "status": "done",
+  "tags": ["phase-2", "refactoring", "B16"],
+  "properties": {
+    "brief_task_id": "B16",
+    "target_files": [
+      "issues_fs/issues/graph_services/Type__Service.py",
+      "issues_fs/schemas/graph/Schema__Link__Type.py"
+    ],
+    "depends_on": [],
+    "has_provided_code": false,
+    "description": "Create Schema__Link__Type__Update schema. Add update_link_type(name, updates) method to Type__Service. No provided implementation code -- implement from brief specification following B15 pattern.",
+    "dev_notes": "Created Schema__Link__Type__Update (pure data container with inverse_verb, description, source_types, target_types) and Schema__Link__Type__Update__Response in issues_fs/schemas/graph/Schema__Link__Type__Update.py. Added update_link_type method to Type__Service with @type_safe decorator and partial update support. Method follows B15 pattern: find by verb, apply non-None updates, persist. 7 new tests in test_Type__Service__B16__Update_Link_Type.py. All 401 tests pass."
+  }
+}
