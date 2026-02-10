@@ -30,13 +30,13 @@ from issues_fs.schemas.graph.Schema__Link__Type                                 
 from issues_fs.schemas.graph.Schema__Type__Index                                                        import Schema__Type__Index
 from issues_fs.issues.storage.Path__Handler__Graph_Node                                                 import Path__Handler__Graph_Node
 
+# todo: find a better way to do this
+SKIP_LABELS  = {'config', 'data', 'issues', 'indexes', '.issues'}                # Phase 2: System folder names
 
 class Graph__Repository(Type_Safe):                                              # Memory-FS based graph repository
     memory_fs    : Memory_FS                                                     # Storage abstraction
     path_handler : Path__Handler__Graph_Node                                     # Path generation
     storage_fs   : Storage_FS             = None                                 # Set from memory_fs
-
-    SKIP_LABELS  = {'config', 'data', 'issues', 'indexes', '.issues'}            # Phase 2: System folder names
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -158,7 +158,7 @@ class Graph__Repository(Type_Safe):                                             
             folder_path = path.rsplit('/issue.json', 1)[0]                       # Extract folder path
             label       = folder_path.rsplit('/', 1)[-1]                         # Extract label from path
 
-            if label in self.SKIP_LABELS:                                        # Skip system folders
+            if label in SKIP_LABELS:                                             # Skip system folders
                 continue
 
             node_type = self.extract_node_type_from_file(path)

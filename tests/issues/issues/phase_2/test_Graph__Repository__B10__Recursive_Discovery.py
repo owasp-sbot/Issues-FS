@@ -15,7 +15,7 @@ from osbot_utils.utils.Json                                                     
 from issues_fs.schemas.graph.Safe_Str__Graph_Types               import Safe_Str__Node_Type, Safe_Str__Node_Label, Safe_Str__Status
 from issues_fs.schemas.graph.Schema__Node                        import Schema__Node
 from issues_fs.schemas.graph.Schema__Node__Info                  import Schema__Node__Info
-from issues_fs.issues.graph_services.Graph__Repository   import Graph__Repository
+from issues_fs.issues.graph_services.Graph__Repository import Graph__Repository, SKIP_LABELS
 from issues_fs.issues.storage.Path__Handler__Graph_Node  import Path__Handler__Graph_Node
 
 
@@ -44,12 +44,9 @@ class test_Graph__Repository__B10__Recursive_Discovery(TestCase):
     # ═══════════════════════════════════════════════════════════════════════════════
 
     def test__skip_labels__contains_system_folders(self):                         # Verify SKIP_LABELS has expected values
-        skip = Graph__Repository.SKIP_LABELS
+        skip = sorted(list(SKIP_LABELS))
+        assert skip == ['.issues', 'config', 'data', 'indexes', 'issues']
 
-        assert 'config'  in skip
-        assert 'data'    in skip
-        assert 'issues'  in skip
-        assert 'indexes' in skip
 
     # ═══════════════════════════════════════════════════════════════════════════════
     # nodes_list_all Tests

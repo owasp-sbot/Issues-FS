@@ -17,7 +17,7 @@ from osbot_utils.type_safe.Type_Safe                                            
 from osbot_utils.type_safe.type_safe_core.decorators.type_safe                               import type_safe
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Path            import Safe_Str__File__Path
 from osbot_utils.type_safe.primitives.domains.files.safe_str.Safe_Str__File__Name            import Safe_Str__File__Name
-from issues_fs.schemas.graph.Safe_Str__Graph_Types          import Safe_Str__Node_Type, Safe_Str__Node_Label
+from issues_fs.schemas.graph.Safe_Str__Graph_Types                                           import Safe_Str__Node_Type, Safe_Str__Node_Label
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -28,6 +28,8 @@ FILE_NAME__ISSUE_JSON = 'issue.json'                                            
 FILE_NAME__NODE_JSON  = 'node.json'                                              # LEGACY: Fallback for backward compat
 
 # todo: quite a number of raw primitives used below (which need to type safe primitives)
+#       also this class has tons of path injections
+#       we need to do a serious rethink on how this path works ,since even the use of "/data" is wrong below since in the new layout it should be issues
 
 class Path__Handler__Graph_Node(Type_Safe):                                      # Path handler for graph nodes
     base_path : Safe_Str__File__Path = '.issues'                                 # Root directory for issues (empty or '.' for local disk)
@@ -48,9 +50,10 @@ class Path__Handler__Graph_Node(Type_Safe):                                     
     def path_for_issue_json(self                              ,                  # Path to issue.json (preferred)
                             node_type : Safe_Str__Node_Type   ,
                             label     : Safe_Str__Node_Label
-                       ) -> str:
-        if self.has_base_path():
-            return f"{self.base_path}/data/{node_type}/{label}/{FILE_NAME__ISSUE_JSON}"
+                       ) -> Safe_Str__File__Path:
+        # note: the code below doesn't really make sense since the base paths should be set by the storage
+        # if self.has_base_path():
+        #     return f"{self.base_path}/data/{node_type}/{label}/{FILE_NAME__ISSUE_JSON}"
         return f"data/{node_type}/{label}/{FILE_NAME__ISSUE_JSON}"
 
     @type_safe
