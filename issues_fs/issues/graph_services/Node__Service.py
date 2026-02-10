@@ -36,6 +36,7 @@ from issues_fs.issues.graph_services.Graph__Repository                          
 
 
 # todo: refactor to Issue__Node__Service
+#       root_selection_service should not be an object
 class Node__Service(Type_Safe):                                                  # Node business logic service
     repository             : Graph__Repository                                   # Data access layer
     root_selection_service : object            = None                             # Phase 2 (B14/B17): Root context
