@@ -1,0 +1,10 @@
+# Phase 2-5: Integration, CLI, Schema Management, Docs
+# Continues from workstream-issues-file-parser.issues (all done)
+
+Workstream-2 | in-progress | Integrate .issues format into Issues-FS pipeline and CLI
+	Task-11 | done | Hook .issues file discovery into Graph__Repository loading pipeline
+	Task-12 | todo | Add issues-fs check CLI command in Issues-FS__CLI
+	Task-13 | todo | Add issues-fs normalise CLI command in Issues-FS__CLI
+	Task-14 | todo | Add issues-fs check-schema service (type auto-detection + predefined schemas)
+	Task-15 | todo | Add predefined schema definitions for common types (Task, Bug, Workstream, etc.)
+	Task-16 | todo | Write agent workflow guide for .issues format

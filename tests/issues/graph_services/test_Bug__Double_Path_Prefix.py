@@ -151,10 +151,13 @@ class test__bug__Double_Path_Prefix(TestCase):
 
         with Graph__Repository__Factory.create_local_disk(root_path=self.issues_dir) as _:     # But the repo cannot find it
             assert type(_) is Graph__Repository
-            assert _.obj() == __(  storage_fs   = __(root_path=self.issues_dir),
-                                   memory_fs    =  __(storage_fs=__(root_path     = self.issues_dir),
-                                                                    path_handlers = []             ),
-                                   path_handler =__(base_path='.issues'))
+            assert _.obj() == __(  storage_fs          = __(root_path=self.issues_dir),
+                                   memory_fs           =  __(storage_fs=__(root_path     = self.issues_dir),
+                                                                          path_handlers = []             ),
+                                   path_handler        =__(base_path='.issues')         ,
+                                   issues_file_loader  = None                           ,
+                                   issues_file_nodes   = None                           ,
+                                   issues_file_loaded  = False                          )
 
             assert type(_.memory_fs ) is Memory_FS
             assert type(_.storage_fs) is Storage_FS__Local_Disk                                 # confirm storage type
