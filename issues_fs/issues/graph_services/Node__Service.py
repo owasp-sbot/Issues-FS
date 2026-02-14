@@ -68,9 +68,20 @@ class Node__Service(Type_Safe):                                                 
         if node_type:
             summaries = self.list_nodes_for_type(node_type, current_root)
         else:
-            node_types = self.repository.node_types_load()
+            all_nodes  = self.repository.nodes_list_all(root_path=current_root)
+            seen_types = set()
+
+            node_types = self.repository.node_types_load()                       # Registered types
             for nt in node_types:
-                type_summaries = self.list_nodes_for_type(nt.name, current_root)
+                seen_types.add(str(nt.name))
+
+            for node_info in all_nodes:                                          # Collect types from .issues files too
+                nt_str = str(node_info.node_type)
+                if nt_str:
+                    seen_types.add(nt_str)
+
+            for type_name in sorted(seen_types):
+                type_summaries = self.list_nodes_for_type(type_name, current_root)
                 summaries.extend(type_summaries)
 
         return Schema__Node__List__Response(success = True           ,
@@ -89,6 +100,10 @@ class Node__Service(Type_Safe):                                                 
                 continue
 
             node = self.repository.node_load_by_path(node_info.path)
+
+            if node is None:                                                     # Fall back to .issues file cache
+                node = self.repository.issues_files_find_node_by_label(str(node_info.label))
+
             if node:
                 summary = Schema__Node__Summary(label     = node.label     ,
                                                 node_type = node.node_type ,
