@@ -6,7 +6,7 @@
 from typing                                                                     import List
 from osbot_utils.type_safe.Type_Safe                                            import Type_Safe
 
-
+# todo: all these vars and collections need to be type safe
 class Schema__Issues_File__Line(Type_Safe):
     label        : str                                                          # raw label e.g. "Task-1"
     status       : str                                                          # raw status e.g. "todo"
