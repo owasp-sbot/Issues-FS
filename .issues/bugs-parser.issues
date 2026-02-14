@@ -1,0 +1,5 @@
+# Bugs and edge cases found during development
+
+Bug-1 | done | Parser silently accepts labels that don't match Safe_Str__Node_Label regex -> Task-6
+Bug-2 | done | Cross-refs to labels in other .issues files not validated -> Task-9
+Bug-3 | done | No warning when tabs and spaces are mixed in same file -> Task-6

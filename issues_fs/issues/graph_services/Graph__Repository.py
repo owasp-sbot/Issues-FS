@@ -12,6 +12,12 @@
 #   - B11: node_load_by_path(), node_find_path_by_label() for path-based loading
 #   - B12: node_save() now deletes legacy node.json after saving
 #   - B13: get_issue_file_path() no longer falls back to node.json
+#
+# .issues File Integration:
+#   - issues_files_discover(): finds *.issues files in storage
+#   - issues_files_load(): parses .issues files into Schema__Node list
+#   - nodes_list_all(): now includes nodes from .issues files
+#   - node_load_by_label(): searches .issues-sourced nodes too
 # ═══════════════════════════════════════════════════════════════════════════════
 
 from typing                                                                                             import List, Optional
@@ -29,14 +35,18 @@ from issues_fs.schemas.graph.Schema__Node__Type                                 
 from issues_fs.schemas.graph.Schema__Link__Type                                                         import Schema__Link__Type
 from issues_fs.schemas.graph.Schema__Type__Index                                                        import Schema__Type__Index
 from issues_fs.issues.storage.Path__Handler__Graph_Node                                                 import Path__Handler__Graph_Node
+from issues_fs.issues.issues_file.Issues_File__Loader__Service                                          import Issues_File__Loader__Service
 
 # todo: find a better way to do this
 SKIP_LABELS  = {'config', 'data', 'issues', 'indexes', '.issues'}                # Phase 2: System folder names
 
 class Graph__Repository(Type_Safe):                                              # Memory-FS based graph repository
-    memory_fs    : Memory_FS                                                     # Storage abstraction
-    path_handler : Path__Handler__Graph_Node                                     # Path generation
-    storage_fs   : Storage_FS             = None                                 # Set from memory_fs
+    memory_fs            : Memory_FS                                             # Storage abstraction
+    path_handler         : Path__Handler__Graph_Node                             # Path generation
+    storage_fs           : Storage_FS             = None                         # Set from memory_fs
+    issues_file_loader   : Issues_File__Loader__Service  = None                  # .issues file loader
+    issues_file_nodes    : list                          = None                  # cached nodes from .issues files
+    issues_file_loaded   : bool                          = False                 # whether cache is populated
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -142,10 +152,12 @@ class Graph__Repository(Type_Safe):                                             
 
     @type_safe
     def nodes_list_all(self                                    ,                 # Find all issues recursively
-                       root_path : Safe_Str__File__Path = None
+                       root_path      : Safe_Str__File__Path = None ,
+                       include_issues_files : bool           = True
                   ) -> List[Schema__Node__Info]:
         all_paths = self.storage_fs.files__paths()
         nodes     = []
+        seen_labels = set()
 
         for path in all_paths:
             if path.endswith('/issue.json') is False:                            # Only issue.json files
@@ -167,6 +179,17 @@ class Graph__Repository(Type_Safe):                                             
                                            path      = folder_path,
                                            node_type = node_type  )
             nodes.append(node_info)
+            seen_labels.add(label)
+
+        if include_issues_files is True:                                         # Add nodes from .issues files
+            for node in self.issues_files_get_cached_nodes():
+                label = str(node.label)
+                if label not in seen_labels:                                     # JSON nodes take precedence
+                    node_info = Schema__Node__Info(label     = label             ,
+                                                   path      = f'.issues/{label}',
+                                                   node_type = str(node.node_type))
+                    nodes.append(node_info)
+                    seen_labels.add(label)
 
         return nodes
 
@@ -244,6 +267,10 @@ class Graph__Repository(Type_Safe):                                             
 
         if path is not None:
             return self.node_load_by_path(path)
+
+        issues_node = self.issues_files_find_node_by_label(str(label))           # Fall back to .issues files
+        if issues_node is not None:
+            return issues_node
 
         return None
 
@@ -418,8 +445,52 @@ class Graph__Repository(Type_Safe):                                             
         return False
 
     # ═══════════════════════════════════════════════════════════════════════════════
+    # .issues File Integration
+    # ═══════════════════════════════════════════════════════════════════════════════
+
+    def issues_files_discover(self) -> List[str]:                                # Find all *.issues files in storage
+        all_paths = self.storage_fs.files__paths()
+        return [str(p) for p in all_paths if str(p).endswith('.issues')]
+
+    def issues_files_load(self) -> list:                                         # Parse .issues files into Schema__Node
+        if self.issues_file_loader is None:
+            self.issues_file_loader = Issues_File__Loader__Service()
+
+        issues_paths = self.issues_files_discover()
+        if not issues_paths:
+            self.issues_file_nodes  = []
+            self.issues_file_loaded = True
+            return []
+
+        files = []
+        for path in issues_paths:
+            content = self.storage_fs.file__str(path)
+            if content:
+                files.append((content, str(path)))
+
+        result = self.issues_file_loader.load_multiple(files)
+        self.issues_file_nodes  = result.nodes
+        self.issues_file_loaded = True
+        return result.nodes
+
+    def issues_files_get_cached_nodes(self) -> list:                             # Get cached .issues nodes (load if needed)
+        if self.issues_file_loaded is False:
+            self.issues_files_load()
+        return self.issues_file_nodes or []
+
+    def issues_files_find_node_by_label(self, label: str):                       # Find a node from .issues files by label
+        for node in self.issues_files_get_cached_nodes():
+            if str(node.label) == label:
+                return node
+        return None
+
+    def issues_files_invalidate_cache(self):                                     # Clear cached .issues nodes (force reload)
+        self.issues_file_loaded = False
+
+    # ═══════════════════════════════════════════════════════════════════════════════
     # Utility Operations
     # ═══════════════════════════════════════════════════════════════════════════════
 
     def clear_storage(self) -> None:                                             # Clear all data (for tests)
         self.storage_fs.clear()
+        self.issues_file_loaded = False
