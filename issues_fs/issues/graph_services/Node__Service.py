@@ -73,10 +73,10 @@ class Node__Service(Type_Safe):                                                 
 
             node_types = self.repository.node_types_load()                       # Registered types
             for nt in node_types:
-                seen_types.add(str(nt.name))
+                seen_types.add(nt.name)
 
             for node_info in all_nodes:                                          # Collect types from .issues files too
-                nt_str = str(node_info.node_type)
+                nt_str = node_info.node_type
                 if nt_str:
                     seen_types.add(nt_str)
 
@@ -96,13 +96,13 @@ class Node__Service(Type_Safe):                                                 
         all_nodes = self.repository.nodes_list_all(root_path=root_path)          # Phase 2 (B10/B17): Recursive with filter
 
         for node_info in all_nodes:
-            if str(node_info.node_type) != str(node_type):
+            if node_info.node_type != node_type:
                 continue
 
             node = self.repository.node_load_by_path(node_info.path)
 
             if node is None:                                                     # Fall back to .issues file cache
-                node = self.repository.issues_files_find_node_by_label(str(node_info.label))
+                node = self.repository.issues_files_find_node_by_label(node_info.label)
 
             if node:
                 summary = Schema__Node__Summary(label     = node.label     ,
@@ -117,7 +117,7 @@ class Node__Service(Type_Safe):                                                 
         if self.root_selection_service is None:
             return None
 
-        root_str = str(self.root_selection_service.current_root)
+        root_str = self.root_selection_service.current_root
         if root_str:
             return Safe_Str__File__Path(root_str)
 
@@ -148,7 +148,7 @@ class Node__Service(Type_Safe):                                                 
                     request : Schema__Node__Create__Request
                ) -> Schema__Node__Create__Response:
         # Validate title is not empty
-        if str(request.title).strip() == '':
+        if request.title.strip() == '':
             return Schema__Node__Create__Response(success = False               ,
                                                   message = 'Title is required' )
 
@@ -156,7 +156,7 @@ class Node__Service(Type_Safe):                                                 
         node_types = self.repository.node_types_load()
         node_type_def = None
         for nt in node_types:
-            if str(nt.name) == str(request.node_type):
+            if nt.name == request.node_type:
                 node_type_def = nt
                 break
 
@@ -318,8 +318,8 @@ class Node__Service(Type_Safe):                                                 
     def parse_label_to_type(self                              ,                  # Phase 2 (B22): Extract type from label
                             label : Safe_Str__Node_Label
                        ) -> Safe_Str__Node_Type:
-        label_str   = str(label)
-        known_types = [str(nt.name) for nt in self.repository.node_types_load()]
+        label_str   = label
+        known_types = [nt.name for nt in self.repository.node_types_load()]
 
         for node_type in sorted(known_types, key=len, reverse=True):             # Longest first so 'user-story' matches before 'user'
             prefix = self.type_to_label_prefix(node_type)
@@ -395,7 +395,7 @@ class Node__Service(Type_Safe):                                                 
                        links   : list
                   ) -> None:
 
-        label_str = str(node.label)
+        label_str = node.label
         if label_str in visited or depth < 0:
             return
 
@@ -412,7 +412,7 @@ class Node__Service(Type_Safe):                                                 
         if node.links:
             for link in node.links:
                 target_label = link.target_label
-                if target_label and str(target_label) not in visited:
+                if target_label and target_label not in visited:
                     target_node = self.resolve_link_target(link)
                     if target_node:
                         links.append(Schema__Graph__Link(source    = node.label      ,
@@ -423,7 +423,7 @@ class Node__Service(Type_Safe):                                                 
         # Find and traverse incoming links
         incoming = self.find_incoming_links(node.label)
         for source_node, link_type in incoming:
-            if str(source_node.label) not in visited:
+            if source_node.label not in visited:
                 links.append(Schema__Graph__Link(source    = source_node.label ,
                                                  target    = node.label        ,
                                                  link_type = link_type         ))
@@ -452,21 +452,21 @@ class Node__Service(Type_Safe):                                                 
                             label : Safe_Str__Node_Label
                        ) -> List[tuple]:
         incoming    = []
-        label_str   = str(label)
+        label_str   = label
         node_types  = self.repository.node_types_load()
 
         for nt in node_types:
             labels = self.repository.nodes_list_labels(nt.name)
             for node_label in labels:
-                if str(node_label) == label_str:                                 # Skip self
+                if node_label == label_str:                                 # Skip self
                     continue
 
                 node = self.repository.node_load(node_type = nt.name   ,
                                                  label     = node_label)
                 if node and node.links:
                     for link in node.links:
-                        if link.target_label and str(link.target_label) == label_str:
-                            incoming.append((node, str(link.verb)))
+                        if link.target_label and link.target_label == label_str:
+                            incoming.append((node, link.verb))
                             break                                                # Only add node once
 
         return incoming
